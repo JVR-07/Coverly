@@ -1,82 +1,98 @@
 # Requisitos del Sistema - Coverly
 
-## Funcionales principales
+## Requisitos Funcionales (RF)
 
-### Gestión de Usuarios
+### RF-01 Gestión de Usuarios
 
-- Login seguro
-- Roles
-- Permisos
-- Administración
+El sistema deberá permitir:
 
-### Información del Cliente
+- Login seguro.
+- Gestión de roles y permisos (Agente, Supervisor, Administrador).
+- Administración de cuentas.
 
-- Captura completa
-- Perfil económico
-- Historial
-- Evaluación de riesgo
+### RF-02 Captura de Información del Cliente
 
-### Catálogo de Seguros
+El sistema deberá permitir registrar:
 
-- Visualización
-- CRUD
-- Coberturas
-- Restricciones
+- Datos personales.
+- Perfil económico.
+- Historial de seguros.
+- Tipo de cliente (nuevo/recurrente).
+- Necesidades declaradas.
+- Nivel de riesgo.
 
-### Motor de Recomendación
+### RF-03 Catálogo de Seguros
 
-- Análisis de perfil
-- Comparación de productos
-- Ranking
-- Evaluación elegibilidad
+El sistema deberá:
 
-### Personalización Comercial
+- Mostrar productos disponibles.
+- Permitir CRUD de productos.
+- Incluir gestión de coberturas, precios y restricciones.
 
-- Promociones
-- Descuentos
-- Cross-selling
-- Upselling
+### RF-04 Motor Inteligente de Recomendación
 
-### Resultados
+El sistema deberá analizar datos del cliente para:
 
-- Mejor opción
-- Alternativas
-- Justificación
-- Score
+- Comparar productos.
+- Evaluar elegibilidad.
+- Generar ranking de opciones basado en perfil demográfico, historial, rentabilidad y riesgo.
 
-### Reportes
+### RF-05 Personalización de Ofertas
 
-- Uso del sistema
-- Ventas derivadas
-- Métricas
+El sistema deberá sugerir:
+
+- Promociones aplicables y descuentos.
+- Complementos recomendados.
+- Estrategias de Upselling y Cross-selling.
+
+### RF-06 Visualización de Resultados
+
+El agente deberá visualizar:
+
+- La mejor opción sugerida.
+- Alternativas viables.
+- Justificación de la recomendación (Score de adecuación).
+- Beneficios esperados.
+
+### RF-07 Reportes
+
+El sistema deberá generar métricas sobre:
+
+- Uso del sistema.
+- Recomendaciones aceptadas vs. rechazadas.
+- Ventas derivadas.
+- Desempeño general.
 
 ---
 
-## No Funcionales
+## Requisitos No Funcionales (RNF)
 
-### Seguridad
+### RNF-01 Seguridad
 
-- Autenticación robusta
-- Encriptación
-- Control por roles
+- Autenticación robusta.
+- Encriptación de datos sensibles.
+- Control estricto por roles.
 
-### Rendimiento
+### RNF-02 Escalabilidad
 
-- UI < 2s
-- Recomendación < 5s
+Arquitectura preparada para:
 
-### Escalabilidad
+- Futuro acceso de clientes externos (Autoservicio).
+- Incremento de volumen de usuarios.
+- Integración futura con modelos de IA avanzada.
 
-- Usuarios crecientes
-- Acceso externo futuro
+### RNF-03 Rendimiento
 
-### Usabilidad
+- Tiempo de respuesta de UI: < 2 segundos.
+- Generación de recomendación: < 5 segundos.
 
-- Flujo guiado
-- UI clara
+### RNF-04 Usabilidad
 
-### Mantenibilidad
+- UI clara y profesional.
+- Flujo guiado para minimizar capacitación.
 
-- Modularidad
-- APIs desacopladas
-- Documentación continua
+### RNF-05 Mantenibilidad
+
+- Código modular (Clean Code).
+- API desacoplada.
+- Documentación técnica actualizada.

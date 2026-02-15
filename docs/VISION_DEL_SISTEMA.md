@@ -4,57 +4,54 @@
 
 Coverly es una plataforma web interna diseñada para asistir a agentes de seguros en la toma de decisiones comerciales mediante análisis automatizado y recomendaciones inteligentes.
 
-Busca transformar un proceso manual, inconsistente y dependiente de experiencia individual en un flujo guiado por datos.
-
 ## Problema que resuelve
 
-Actualmente los agentes:
+Actualmente los agentes invierten demasiado tiempo en procesos manuales (recopilación, análisis, comparación), lo que genera:
 
-- Recopilan información manualmente
-- Analizan perfiles sin herramientas
-- Comparan seguros manualmente
-- Evalúan promociones manualmente
-- Construyen ofertas desde experiencia personal
+- Baja escalabilidad.
+- Inconsistencia en las ofertas.
+- Lentitud en el cierre.
+- Suboptimización comercial.
 
-Esto genera:
+## Objetivo Estratégico
 
-- Baja escalabilidad
-- Inconsistencia
-- Lentitud
-- Suboptimización comercial
+Transformar la interacción comercial de un proceso manual a uno guiado por datos, logrando:
 
-## Objetivo estratégico
+- Centralizar información del cliente.
+- Automatizar el análisis de perfiles.
+- Recomendar paquetes óptimos y sugerir estrategias (Upsell/Cross-sell).
+- Mejorar la tasa de conversión y retención.
 
-La plataforma debe:
+## Valores del Producto
 
-- Centralizar información del cliente
-- Automatizar análisis
-- Recomendar productos óptimos
-- Sugerir estrategias comerciales
-- Identificar oportunidades de venta adicional
+1. **Confianza:** Decisiones seguras.
+2. **Claridad:** Recomendaciones comprensibles.
+3. **Protección:** Respaldo constante.
+4. **Inteligencia:** Análisis basado en datos.
+5. **Modernidad:** Experiencia digital fluida.
 
-## Alcance inicial
+## Alcance Inicial (Fase Interna)
 
-- Uso interno
-- Motor de recomendación basado en reglas
-- Gestión de clientes
-- Catálogo de seguros
-- Aplicación automática de promociones
+- Uso exclusivo por empleados.
+- Motor de recomendación (Reglas -> IA progresiva).
+- Gestión de clientes y catálogo.
+- Aplicación automática de promociones.
 
-## Evolución futura
+*Nota: No incluye portal público ni autoservicio en esta fase.*
 
-El sistema debe estar preparado para:
+## Visión de Evolución (Futuro)
 
-- Portal cliente self-service
-- Simuladores públicos
-- IA predictiva avanzada
-- Cotización automática
-- Contratación digital
+El sistema está arquitectado para expandirse hacia:
 
-## Principios de diseño
+- Portal cliente self-service.
+- Simuladores públicos.
+- IA predictiva avanzada.
+- Contratación 100% digital.
 
-- Escalabilidad desde el inicio
-- Modularidad desacoplada
-- Observabilidad
-- Seguridad
-- Contexto interpretable por AI
+## Riesgos Identificados
+
+- **Datos:** Disponibilidad limitada de datos iniciales para el motor.
+- **Negocio:** Complejidad del catálogo de productos.
+- **Organizacional:** Resistencia al cambio por parte de los agentes.
+
+*Mitigación:* Implementación progresiva, capacitación y validación continua.

@@ -1,37 +1,65 @@
 # Identidad de Producto - Coverly
 
+## Tagline
+
+**"Coverage with confidence"**
+
 ## Posicionamiento
 
-Plataforma que combina confianza aseguradora con inteligencia analítica.
+Coverly combina la confianza tradicional del sector asegurador con analítica moderna para guiar decisiones informadas.
 
-## Valores
+## Personalidad de Marca
 
-Confianza  
-Claridad  
-Protección  
-Inteligencia  
-Modernidad  
+Equilibrio entre:
 
-## Tono
+- Tradicional / Moderno
+- Estable / Innovador
+- Profesional / Accesible
+- Confiable / Tecnológico
 
-- Profesional
+## Tono de Voz
+
+- Claro
 - Tranquilizador
-- Comprensible
+- Profesional
+- Sin jerga técnica excesiva
+- *Ejemplo:* "Helping you choose coverage with confidence."
 
-## Colores
+## Paleta de Colores
 
-Primary
-\# 0B2E59
+### Principal (Confianza)
 
-Secondary
-\# 1AA6A6
+**Deep Trust Blue**
+`#0B2E59`
+*Uso: Header, logo, botones principales, navegación.*
 
-Background
-\# F5F7FA
+### Secundario (Tecnología / IA)
 
-Text
-\# 2E2E2E
+**Teal Insight**
+`#1AA6A6`
+*Uso: Highlights, hover, elementos activos.*
+
+### Fondo
+
+**Soft Light**
+`#F5F7FA`
+*Uso: Fondo general UI.*
+
+### Texto
+
+**Graphite** (Principal)
+`#2E2E2E`
+
+**Slate Gray** (Secundario)
+`#6B7280`
+
+### Estados del Sistema
+
+- **Success:** `#22C55E`
+- **Warning:** `#F59E0B`
+- **Error:** `#EF4444`
 
 ## Tipografía
 
-Inter
+**Inter** (Google Fonts / Open Source)
+*Por qué:* Perfecta para UI, moderna, profesional y excelente legibilidad.
