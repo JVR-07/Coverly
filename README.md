@@ -1,3 +1,18 @@
+![Wallpaper-ITT](https://raw.githubusercontent.com/JVR-07/College-Projects/refs/heads/main/Resource/wallpaper_itt.png)
+
+> ### ⚖️ Legal Disclaimer and Project Purpose
+>
+> This project (Coverly) has been created solely as an academic exercise to demonstrate knowledge in software architecture and full-stack development.
+>
+> 1. **Academic Nature:** All content, including the business logic, architecture, and documentation, is fictitious and intended for demonstration purposes only.
+>
+> 2. **No Affiliation:** This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with any real insurance company or existing organization.
+>
+> 3. **Non-Profit Use:** This software is distributed under the specified license (GPLv3) for non-profit educational purposes and is not intended for commercial use or production environments.
+>
+
+![Coverly-full-logo](coverly_full_logo.png)
+
 # Coverly
 
 **"Coverage with confidence"**
