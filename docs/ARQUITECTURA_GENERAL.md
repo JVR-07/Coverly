@@ -2,80 +2,54 @@
 
 ## Estilo Arquitectónico
 
-Arquitectura modular desacoplada basada en servicios.
+**Cloud-Native Modular Monolith**
+El sistema se diseña como un monolito modular desacoplado, desplegado en contenedores sobre infraestructura PaaS (Platform as a Service) y Serverless. Esta estrategia equilibra la simplicidad de desarrollo inicial con la potencia de escalado futura.
 
-Inicialmente monolito modular con capacidad de evolución a microservicios.
+## Componentes Principales
 
-## Componentes principales
+### Frontend (SPA)
 
-### Frontend
+Aplicación Web de Página Única (React/Vite).
 
-Aplicación Web SPA
+- **Responsabilidad:** Interfaz de agente, visualización y captura de datos.
+- **Despliegue:** Hosting estático distribuido (CDN).
 
-Responsabilidades:
+### Backend API & Motor Inteligente
 
-- Interfaz de agente
-- Visualización de recomendaciones
-- Captura de datos
+Núcleo del sistema (Node.js/Python).
 
----
+- **Responsabilidad:** Orquestación, lógica de negocio y algoritmos de recomendación.
+- **Despliegue:** Contenedores sin servidor (Serverless Containers).
 
-### Backend API
+### Persistencia
 
-Núcleo del sistema
+Base de datos relacional gestionada.
 
-Responsabilidades:
-
-- Autenticación
-- Lógica de negocio
-- Orquestación
-- Exposición REST
+- **Dominios:** Clientes, Productos, Reglas, Historial.
+- **Tecnología:** PostgreSQL.
 
 ---
 
-### Motor Inteligente
+## Estrategia de Infraestructura (Azure)
 
-Servicio lógico desacoplado
+La solución se apoya nativamente en servicios gestionados de Microsoft Azure para reducir carga operativa.
 
-Fase 1:
+Ver detalle en: [INFRAESTRUCTURA_AZURE.md](INFRAESTRUCTURA_AZURE.md)
 
-- Reglas determinísticas
-
-Fase 2:
-
-- Machine Learning
-
-Fase 3:
-
-- IA predictiva
-
----
-
-### Base de Datos
-
-Persistencia estructurada
-
-Dominios:
-
-- Clientes
-- Productos
-- Reglas
-- Promociones
-- Historial
+[![Diagrama-Infraestructura](https://mermaid.ink/img/pako:eNptkmFvmzAQhv-KZalSJ6UpCYwkSJvkBFKhUZJCoknDU-WBS1iDHRmzrY3y33fA0mZK_AHutX3P-T17j1OZcexgKp628ne6YUqjIKKCiqsr9KkZaBb4XrjqBBXriquE5Fxojm7RuqqZKuT3_xLm0SJceaF7TKnqH7liuw2aKwlpIqMCwYiXJIk4S3UTAaFdOMFMyezLJcqUpc9vELL0kxAs9H9WTYxirn4VKb-A8-FMQeDfNV688M4PvTPyvdRSPfpwxm3ROuxqeCIvBE-WL3ojBYp4KssS6EwXILvFC_VcsiJTEp9XWXJVFRX0IS1YV8CdJtdLWelc8fgh-HABNl-v1pGHiH9G88njvNa1-ocifkJea8XRYscFbL8FUxnfHvtSXWIHi6_x6fWim5vPzZ1QAZ9WQGepaNrbCHf6Hnfuqej-73tP9UlqC6UC93Cuigw7WtW8h0uuStZIvG9MUKw3vOQUOxBmTD1TeJ0HyNkx8U3K8pimZJ1vsPPEthWoegcXwt2CQVvKt1kFZrmayVpo7Fi21UKws8d_sGOP-vZH0xzZ1tCYGGPL7uEX7Axgejw2RoPhxBwODdOyDj382pY1-uPBwLANc2iO7ZE5MezDX0H1Aa8?type=png)](https://mermaid.live/edit#pako:eNptkmFvmzAQhv-KZalSJ6UpCYwkSJvkBFKhUZJCoknDU-WBS1iDHRmzrY3y33fA0mZK_AHutX3P-T17j1OZcexgKp628ne6YUqjIKKCiqsr9KkZaBb4XrjqBBXriquE5Fxojm7RuqqZKuT3_xLm0SJceaF7TKnqH7liuw2aKwlpIqMCwYiXJIk4S3UTAaFdOMFMyezLJcqUpc9vELL0kxAs9H9WTYxirn4VKb-A8-FMQeDfNV688M4PvTPyvdRSPfpwxm3ROuxqeCIvBE-WL3ojBYp4KssS6EwXILvFC_VcsiJTEp9XWXJVFRX0IS1YV8CdJtdLWelc8fgh-HABNl-v1pGHiH9G88njvNa1-ocifkJea8XRYscFbL8FUxnfHvtSXWIHi6_x6fWim5vPzZ1QAZ9WQGepaNrbCHf6Hnfuqej-73tP9UlqC6UC93Cuigw7WtW8h0uuStZIvG9MUKw3vOQUOxBmTD1TeJ0HyNkx8U3K8pimZJ1vsPPEthWoegcXwt2CQVvKt1kFZrmayVpo7Fi21UKws8d_sGOP-vZH0xzZ1tCYGGPL7uEX7Axgejw2RoPhxBwODdOyDj382pY1-uPBwLANc2iO7ZE5MezDX0H1Aa8)
 
 ---
 
 ## Comunicación
 
-- REST
-- JSON
-- Token authentication
+- **Interna:** Llamadas directas entre módulos (en memoria) o HTTP (entre contenedores).
+- **Externa:** REST API sobre HTTPS (JSON).
+- **Autenticación:** JWT vía OAuth2 / OIDC.
 
 ## Escalabilidad
 
-Preparada para:
+El sistema escala horizontalmente gracias a su naturaleza "stateless" en la capa de cómputo:
 
-- Contenerización
-- Cloud deployment
-- Separación de servicios
-- Integraciones externas
+1. **Frontend:** Escala automáticamente en la CDN.
+2. **Backend:** Escala por demanda de peticiones HTTP o carga de CPU (KEDA).
+3. **Base de Datos:** Escala verticalmente según necesidad de IOPS.
