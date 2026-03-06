@@ -58,143 +58,199 @@ Encoding: `UTF-8`
 
 ---
 
-### Autenticación
-
-Uso de token:
-
-```bash
-Authorization: Bearer <token>
-```
-
-Emitido por módulo de autenticación.
-
----
-
 ## Endpoints Base
 
----
+### Autenticación (`/api/auth`)
 
-### 1️⃣ Autenticación
+#### POST `/api/auth/login`
 
-#### Login
+Autentica a un usuario y devuelve el token de sesión.
 
-POST `/auth/login`
-
-Request:
+* Request Body:
 
 ```json
 {
-  "email": "string",
-  "password": "string"
+  "email": "agente@coverly.com",
+  "password": "password123"
 }
 ```
 
-Response:
+* Response (`data`):
 
 ```json
 {
-  "token": "jwt_token",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5c...",
   "user": {
     "id": "uuid",
-    "role": "agent|admin|supervisor"
+    "email": "agente@coverly.com",
+    "role": "agent"
   }
 }
 ```
 
----
+#### GET `/api/auth/me`
 
-#### Verificación de sesión
+Devuelve la información del usuario en sesión
 
-GET `/auth/me`
-
-Response:
+* Response (`data`):
 
 ```json
 {
   "id": "uuid",
-  "email": "string",
-  "role": "string"
+  "name": "Nombre Completo",
+  "email": "agente@coverly.com",
+  "role": "agent"
 }
 ```
 
 ---
 
-### 2️⃣ Usuarios
+### Usuarios (`/api/users`)
 
-#### Crear usuario
+Permite la gestión de cuentas para agentes, supervisores y administradores.
 
-POST `/users`
+#### GET `/api/users`
+
+Lista todos los usuarios del sistema.
+
+* **Query Params**: `?page=1&limit=10&role=agent`.
+
+* **Response (`data`)**: Arreglo de objetos de usuario.
+
+#### POST `/api/users`
+
+Crea un nuevo usuario.
+
+* Request Body:
 
 ```json
 {
-  "name": "string",
-  "email": "string",
-  "role": "string"
+  "name": "Juan Perez",
+  "email": "juan.perez@coverly.com",
+  "password": "SecurePassword123!",
+  "role": "agent" 
 }
 ```
 
----
+#### PUT `/api/users/{id}`
 
-#### Listar usuarios
+Actualiza el rol o información de un usuario.
 
-GET `/users`
-
----
-
-### 3️⃣ Clientes
-
-#### Crear cliente
-
-POST `/clients`
+* Request Body:
 
 ```json
 {
-  "personalData": {},
-  "economicProfile": {},
-  "riskLevel": "low|medium|high",
-  "needs": []
+  "name": "Juan Perez Actualizado",
+  "role": "supervisor",
+  "isActive": true
 }
 ```
 
 ---
 
-#### Obtener perfil
+### CLientes (`/api/clients`)
 
-GET `/clients/{id}`
+Gestiona el perfilamiento y la evaluación de riesgo de los clientes.
 
----
+#### GET `/api/clients`
 
-#### Actualizar cliente
+Lista los clientes registrados.
 
-PUT `/clients/{id}`
+* **Query Params**: `?page=1&limit=10&search=nombre`.
 
----
+#### POST `/api/clients`
 
-### 4️⃣ Catálogo de Productos
+Registra un nuevo cliente con todo su perfilamiento.
 
-#### Listar productos
-
-GET `/products`
-
----
-
-#### Crear producto
-
-POST `/products`
+* **Request Body**:
 
 ```json
 {
-  "name": "string",
-  "type": "string",
-  "coverages": [],
-  "priceBase": 0,
-  "restrictions": []
+  "personalData": {
+    "firstName": "Ana",
+    "lastName": "Gomez",
+    "dateOfBirth": "1985-06-15",
+    "gender": "F",
+    "contact": {
+      "email": "ana@example.com",
+      "phone": "+525551234567"
+    }
+  },
+  "economicProfile": {
+    "annualIncome": 450000,
+    "occupation": "Ingeniera",
+    "dependents": 2
+  },
+  "insuranceHistory": {
+    "hasPreviousInsurance": true,
+    "previousClaimsCount": 0
+  },
+  "clientType": "new",
+  "needs": ["salud", "auto"],
+  "riskLevel": "low"
 }
 ```
 
+* **Response (`data`):** El objeto completo del cliente creado incluyendo su id.
+
+#### GET `/api/clients/{id}`
+
+Obtiene el perfil completo de un cliente.
+
+#### PUT `/api/clients/{id}`
+
+Actualiza la información del cliente. Mismo formato que el POST, aceptando envíos parciales.
+
 ---
 
-### 5️⃣ Recomendaciones
+### Catálogo de Productos `/api/products`
+
+Gestión de seguros, coberturas y restricciones.
+
+#### GET `/api/products`
+
+Lista el catálogo de productos.
+
+* **Query Params**: `?type=salud&isActive=true`.
+
+#### POST `/api/products`
+
+Crea un nuevo seguro en el sistema.
+
+* Request Body:
+
+```json
+{
+  "name": "Seguro Auto Plus",
+  "type": "auto",
+  "description": "Cobertura amplia para vehículos de modelo reciente.",
+  "priceBase": 12000.00,
+  "coverages": [
+    "Daños materiales",
+    "Robo total",
+    "Responsabilidad civil"
+  ],
+  "restrictions": [
+    "Vehículos no mayores a 10 años",
+    "Uso particular exclusivamente"
+  ],
+  "isActive": true
+}
+```
+
+#### GET `/api/products/{id}`
+
+Obtiene el detalle de un seguro específico.
+
+#### PUT `/api/products/{id}`
+
+Actualiza un producto (precios, coberturas o restricciones).
+
+---
+
+> Nota: Los siguientes endpoints son borradores, aún no se han definido en detalle.
+
+### Recomendaciones (`/api/recommendations`)
 
 #### Generar recomendación
 
@@ -218,37 +274,64 @@ Response:
 
 ---
 
-### 6️⃣ Promociones
+### Promociones y Estrategias Comerciales (`/api/promotions`)
 
-#### Obtener promociones aplicables
+#### GET `/api/promotions/applicable/{clientId}`
 
-GET `/promotions/applicable/{clientId}`
+Obtiene las promociones vigentes que aplican al perfil de un cliente específico.
+
+* Response (`data`):
+
+```json
+[
+  {
+    "promotionId": "uuid",
+    "name": "Descuento Buen Fin - Salud",
+    "discountPercentage": 15,
+    "appliesToProducts": ["product_id_1", "product_id_2"],
+    "validUntil": "2026-11-30T23:59:59Z"
+  }
+]
+```
 
 ---
 
-### 7️⃣ Reportes
+### Reportes y Analítica (`/api/reports`)
 
-#### Métricas generales
+#### GET `/api/reports/metrics`
 
-GET `/reports/metrics`
+Genera métricas de rendimiento general (conversiones, rechazos).
 
----
+* **Query Params**: `?startDate=2026-01-01&endDate=2026-03-01`.
 
-#### Uso del sistema
+* Response (`data`):
 
-GET `/reports/usage`
+```json
+{
+  "totalQuotes": 150,
+  "acceptedRecommendations": 45,
+  "rejectedRecommendations": 105,
+  "conversionRate": 30.0,
+  "totalRevenue": 540000.00
+}
+```
 
----
+#### GET `/api/reports/usage`
 
-## Códigos de Error Base
+Métricas de uso del sistema por agente.
 
-| Código  | Descripción            |
-| ------- | ---------------------- |
-| AUTH_01 | Credenciales inválidas |
-| AUTH_02 | Token expirado         |
-| PERM_01 | Acceso no autorizado   |
-| DATA_01 | Payload inválido       |
-| SYS_01  | Error interno          |
+* **Query Params**: `?agentId=uuid`
+
+* Response (`data`):
+
+```json
+{
+  "agentId": "uuid",
+  "loginsCount": 42,
+  "clientsProfiled": 15,
+  "recommendationsGenerated": 20
+}
+```
 
 ---
 
