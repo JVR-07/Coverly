@@ -49,14 +49,14 @@ Coverly se desarrollará mediante una metodología híbrida que combina:
 
 ## Roles del Equipo
 
-| Persona       | Rol                         |
-| ------------- | --------------------------- |
-| Líder Técnico | Backend Core / Arquitectura |
-| Dev A         | Frontend                    |
-| Dev B         | Backend APIs                |
-| Dev C         | Base de Datos               |
-| Dev D         | Motor Inteligente           |
-| Dev E         | QA e Integración            |
+| Persona                | Rol                         |
+| -----------------------| --------------------------- |
+| Líder Técnico (Javier) | Backend Core / Arquitectura |
+| Dev A (Oscar)          | Frontend                    |
+| Dev B (Oscar)          | Backend APIs                |
+| Dev C (Ricardo)        | Base de Datos               |
+| Dev D (Jose Daniel)    | Motor Inteligente           |
+| Dev E (Cesar)          | QA e Integración            |
 
 ---
 
