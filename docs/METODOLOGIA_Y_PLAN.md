@@ -76,12 +76,12 @@ Preparar infraestructura y definiciones que permitan desarrollo paralelo inmedia
 #### Dev A (Frontend)
 
 * **[Prioridad: Media]** Diseñar wireframes iniciales de las vistas principales del agente.
-* **[Prioridad: Alta]** Configurar el proyecto base usando React y Vite.
-* **[Prioridad: Alta]** Integrar y configurar la librería de componentes UI y el sistema de ruteo.
+* **[Prioridad: Alta]** Configurar el proyecto base usando Next.js para fungir tanto de Frontend como Backend Core.
+* **[Prioridad: Alta]** Integrar y configurar la librería de componentes UI y Tailwind.
 
 #### Dev B (Backend APIs)
 
-* **[Prioridad: Alta]** Inicializar el proyecto Node.js con la estructura de carpetas definida.
+* **[Prioridad: Alta]** Configurar las API Routes / Server Actions en el proyecto Next.js.
 * **[Prioridad: Alta]** Implementar el esqueleto del módulo de autenticación (generación y validación de JWT).
 * **[Prioridad: Media]** Crear controladores y rutas vacías (boilerplate) para los endpoints iniciales.
 
@@ -89,7 +89,7 @@ Preparar infraestructura y definiciones que permitan desarrollo paralelo inmedia
 
 * **[Prioridad: Alta]** Diseñar el diagrama de Entidad-Relación (DER) para los dominios iniciales.
 * **[Prioridad: Alta]** Redactar los scripts DDL de creación de tablas.
-* **[Prioridad: Media]** Configurar la instancia de PostgreSQL en Azure Flexible Server.
+* **[Prioridad: Media]** Configurar la instancia de PostgreSQL en AWS RDS.
 
 #### Dev D (Motor Inteligente)
 
@@ -200,7 +200,7 @@ Sistema cercano a producción con soporte analítico y optimización.
 
 #### Líder Técnico (Backend Core / Arquitectura)
 
-* **[Prioridad: Media]** Revisar y consolidar la orquestación de contenedores en Azure.
+* **[Prioridad: Media]** Revisar y consolidar la orquestación de contenedores en AWS Elastic Beanstalk.
 * **[Prioridad: Alta]** Auditar la seguridad general (headers HTTP, sanitización de inputs, CORS).
 * **[Prioridad: Alta]** Configurar un sistema de logging centralizado para trazabilidad de errores.
 
@@ -258,7 +258,7 @@ Preparación técnica y documental para uso real.
 
 #### Todos los roles
 
-* **[Prioridad: Alta]** Monitoreo del deploy interno en el entorno de pruebas de Azure.
+* **[Prioridad: Alta]** Monitoreo del deploy interno en el entorno de pruebas de AWS.
 * **[Prioridad: Media]** Optimización final del consumo de memoria y CPU en contenedores.
 * **[Prioridad: Media]** Revisión de vulnerabilidades de dependencias.
 * **[Prioridad: Baja]** Actualización y cierre de documentación técnica del proyecto.

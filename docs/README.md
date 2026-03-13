@@ -35,14 +35,18 @@ Está diseñada para proporcionar contexto global a:
 ```bash
 - VISION_DEL_SISTEMA → Contexto y objetivos
 - ARQUITECTURA_GENERAL → Diseño de alto nivel
+- STACK_TECNOLOGICO → Stack de tecnologías y Despliegue AWS
 - REQUISITOS_DEL_SISTEMA → Funcionales y no funcionales
 - ARQUITECTURA_DE_MODULOS → Segmentación modular
 - MODELO_DE_DOMINIO_GLOBAL → Entidades y relaciones
 - FLUJOS_OPERATIVOS_CLAVE → Secuencia de procesos
 - METODOLOGIA_Y_PLAN → Iteraciones y roles
 - ESTANDARES_TECNICOS → Buenas practicas
-- CONTRATOS_API_BASE → Contratos base
+- SEGURIDAD_Y_RBAC → Modelo de JWT, roles y permisos
+- CONTRATOS_API_BASE → Contratos API web (Next.js - Frontend/App)
+- CONTRATO_INTERNO_MOTOR → Contrato de integración (Next.js - FastAPI)
 - IDENTIDAD_DE_PRODUCTO → Contexto del producto
+- ESQUEMA_BASE_DATOS → UML y Diccionario de datos para PostgreSQL
 ```
 
 ## Filosofía de documentación
