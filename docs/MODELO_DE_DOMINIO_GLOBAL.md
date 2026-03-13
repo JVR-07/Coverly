@@ -4,9 +4,9 @@
 
 - **User (Usuario)**: Representa a las personas que operan el sistema (agentes, supervisores y administradores), gestionando el acceso y los permisos a las funcionalidades.
 
-- **Client (Cliente)**: Contiene la información central de los prospectos, abarcando sus datos personales, perfil económico, necesidades específicas, portafolio actual de seguros y evaluación de nivel de riesgo.
+- **Client (Cliente)**: Contiene la información central de los prospectos, abarcando sus datos personales, perfil económico (ingresos, estatus laboral, nivel de deuda), necesidades específicas, portafolio actual de seguros y evaluación de nivel de riesgo (score interno, historial de siniestros).
 
-- **InsuranceProduct (Producto de Seguro)**: Define los seguros disponibles en el catálogo, incluyendo su tipo (ej. auto, salud, vida), precio base, estado y restricciones aplicables.
+- **InsuranceProduct (Producto de Seguro)**: Define los seguros disponibles en el catálogo, incluyendo su tipo (Auto, Vida, Incendio, Celular), precio base, estado y restricciones aplicables (edad, antigüedad del bien, zona de riesgo).
 
 - **Coverage (Cobertura)**: Desglose de los detalles de protección específicos que componen e integran un producto de seguro.
 
