@@ -15,6 +15,12 @@
 
 # Coverly
 
+![Status: En Desarrollo](https://img.shields.io/badge/Status-En_Desarrollo-blue)
+![License: GPLv3](https://img.shields.io/badge/License-GPLv3-green)
+![Node: 20+](https://img.shields.io/badge/Node-20%2B-brightgreen)
+![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker)
+
 **"Coverage with confidence"**
 
 Coverly es una plataforma web interna diseñada para transformar la gestión de seguros. Asiste a los agentes en la toma de decisiones comerciales mediante análisis automatizado, gestión centralizada de clientes y un motor de recomendaciones inteligentes.
@@ -27,8 +33,9 @@ Coverly es una plataforma web interna diseñada para transformar la gestión de 
 - [Arquitectura Técnica](#-arquitectura-técnica)
 - [Funcionalidades Clave](#-funcionalidades-clave)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Instalación y Configuración](#-instalación-y-configuración)
 - [Documentación](#-documentación)
-- [Roadmap](#-documentación)
+- [Roadmap](#-roadmap)
 - [Licencia](#-licencia)
 
 ---
@@ -43,19 +50,19 @@ Coverly resuelve esto centralizando la información y utilizando un Motor Inteli
 
 ## 🏗 Arquitectura Técnica
 
-El sistema sigue un estilo arquitectónico de Monolito Modular Cloud-Native, diseñado para ser desplegado en contenedores sobre infraestructura PaaS (Azure).
+El sistema sigue un estilo arquitectónico de Monolito Modular Cloud-Native, diseñado para ser desplegado en contenedores (Docker) sobre infraestructura PaaS en AWS.
 
 ### Stack Tecnológico
 
-**Frontend:** React + Vite (SPA) alojado en Azure Static Web Apps.
+**Frontend:** React + Vite (SPA) alojado en el mismo entorno o contenedor para simplificación inicial.
 
-**Backend:** Node.js contenerizado.
+**Backend:** Node.js (o Next.js) contenerizado.
 
-**Motor Inteligente:** Servicio aislado (Python) para evaluación de reglas y scoring.
+**Motor Inteligente:** Servicio aislado (Python) para evaluación de reglas y scoring empacado en su propio contenedor Docker.
 
-**Base de Datos:** PostgreSQL (Azure Database Flexible Server).
+**Base de Datos:** PostgreSQL en AWS (RDS o EC2 de persistencia).
 
-**Infraestructura:** Azure Container Apps y servicios Serverless.
+**Infraestructura:** Despliegues gestionados a través de Multi-docker en AWS Elastic Beanstalk.
 
 ---
 
@@ -90,7 +97,42 @@ coverly/
 └── README.md             # Este archivo
 ```
 
-*Proximamente se agregaran las carpetas faltantes al repositorio*
+*Próximamente se agregarán las carpetas faltantes al repositorio.*
+
+---
+
+## 🛠 Instalación y Configuración
+
+Sigue estos pasos para levantar un entorno de desarrollo local.
+
+### Prerrequisitos
+Asegúrate de tener instalados:
+- Node.js (v20 o superior)
+- Python (v3.10 o superior)
+- Docker y Docker Compose
+- PostgreSQL (si decides instanciarla de forma local)
+
+### Configuración del Entorno
+1. Copia el archivo de variables de entorno de ejemplo:
+   ```bash
+   cp .env.example .env
+   ```
+2. Configura los valores necesarios de puerto, conexión a la DB y secretos en `.env`.
+
+### Ejecución con Docker
+Para desplegar la aplicación completa usa Docker Compose:
+```bash
+docker-compose up -build
+```
+
+### Ejecución Local
+Si optas por correr cada servicio independientemente:
+- **Core (Node/React):** `npm install` && `npm run dev`
+- **Motor de Recomendación (Python):** `pip install -r requirements.txt` && `python app.py`
+
+### Testing
+- Para pruebas del Core (Node): `npm run test`
+- Para el Motor Inteligente (Python): `pytest`
 
 ---
 
