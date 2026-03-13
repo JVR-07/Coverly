@@ -7,36 +7,34 @@ El sistema se diseña como un monolito modular desacoplado, desplegado en conten
 
 ## Componentes Principales
 
-### Frontend (SPA)
+### Backend Web Core & Frontend (Next.js)
 
-Aplicación Web de Página Única (React/Vite).
+Aplicación Web Full-Stack.
 
-- **Responsabilidad:** Interfaz de agente, visualización y captura de datos.
-- **Despliegue:** Hosting estático distribuido (CDN).
+- **Responsabilidad:** Interfaz de agente, visualización, captura de datos, autenticación y API transaccional.
+- **Despliegue:** Contenedor Docker desplegado en AWS Elastic Beanstalk.
 
-### Backend API & Motor Inteligente
+### Motor Inteligente
 
-Núcleo del sistema (Node.js/Python).
+Microservicio aislado (Python/FastAPI).
 
-- **Responsabilidad:** Orquestación, lógica de negocio y algoritmos de recomendación.
-- **Despliegue:** Contenedores sin servidor (Serverless Containers).
+- **Responsabilidad:** Algoritmos de recomendación, scoring y reglas complejas.
+- **Despliegue:** Contenedor Docker en AWS Elastic Beanstalk (comunicación inter-contenedores).
 
 ### Persistencia
 
 Base de datos relacional gestionada.
 
 - **Dominios:** Clientes, Productos, Reglas, Historial.
-- **Tecnología:** PostgreSQL.
+- **Tecnología:** PostgreSQL en AWS RDS.
 
 ---
 
-## Estrategia de Infraestructura (Azure)
+## Estrategia de Infraestructura (AWS)
 
-La solución se apoya nativamente en servicios gestionados de Microsoft Azure para reducir carga operativa.
+La solución se apoya nativamente en recursos en la nube de Amazon Web Services, utilizando Elastic Beanstalk para manejar la orquestación y balanceo de los contenedores Docker, además de instancias en AWS RDS para bases de datos transaccionales, minimizando el esfuerzo de DevOps.
 
-Ver detalle en: [INFRAESTRUCTURA_AZURE.md](INFRAESTRUCTURA_AZURE.md)
-
-[![Diagrama-Infraestructura](https://mermaid.ink/img/pako:eNptkmFvmzAQhv-KZalSJ6UpCYwkSJvkBFKhUZJCoknDU-WBS1iDHRmzrY3y33fA0mZK_AHutX3P-T17j1OZcexgKp628ne6YUqjIKKCiqsr9KkZaBb4XrjqBBXriquE5Fxojm7RuqqZKuT3_xLm0SJceaF7TKnqH7liuw2aKwlpIqMCwYiXJIk4S3UTAaFdOMFMyezLJcqUpc9vELL0kxAs9H9WTYxirn4VKb-A8-FMQeDfNV688M4PvTPyvdRSPfpwxm3ROuxqeCIvBE-WL3ojBYp4KssS6EwXILvFC_VcsiJTEp9XWXJVFRX0IS1YV8CdJtdLWelc8fgh-HABNl-v1pGHiH9G88njvNa1-ocifkJea8XRYscFbL8FUxnfHvtSXWIHi6_x6fWim5vPzZ1QAZ9WQGepaNrbCHf6Hnfuqej-73tP9UlqC6UC93Cuigw7WtW8h0uuStZIvG9MUKw3vOQUOxBmTD1TeJ0HyNkx8U3K8pimZJ1vsPPEthWoegcXwt2CQVvKt1kFZrmayVpo7Fi21UKws8d_sGOP-vZH0xzZ1tCYGGPL7uEX7Axgejw2RoPhxBwODdOyDj382pY1-uPBwLANc2iO7ZE5MezDX0H1Aa8?type=png)](https://mermaid.live/edit#pako:eNptkmFvmzAQhv-KZalSJ6UpCYwkSJvkBFKhUZJCoknDU-WBS1iDHRmzrY3y33fA0mZK_AHutX3P-T17j1OZcexgKp628ne6YUqjIKKCiqsr9KkZaBb4XrjqBBXriquE5Fxojm7RuqqZKuT3_xLm0SJceaF7TKnqH7liuw2aKwlpIqMCwYiXJIk4S3UTAaFdOMFMyezLJcqUpc9vELL0kxAs9H9WTYxirn4VKb-A8-FMQeDfNV688M4PvTPyvdRSPfpwxm3ROuxqeCIvBE-WL3ojBYp4KssS6EwXILvFC_VcsiJTEp9XWXJVFRX0IS1YV8CdJtdLWelc8fgh-HABNl-v1pGHiH9G88njvNa1-ocifkJea8XRYscFbL8FUxnfHvtSXWIHi6_x6fWim5vPzZ1QAZ9WQGepaNrbCHf6Hnfuqej-73tP9UlqC6UC93Cuigw7WtW8h0uuStZIvG9MUKw3vOQUOxBmTD1TeJ0HyNkx8U3K8pimZJ1vsPPEthWoegcXwt2CQVvKt1kFZrmayVpo7Fi21UKws8d_sGOP-vZH0xzZ1tCYGGPL7uEX7Axgejw2RoPhxBwODdOyDj382pY1-uPBwLANc2iO7ZE5MezDX0H1Aa8)
+Ver detalle técnico en: [STACK_TECNOLOGICO.md](STACK_TECNOLOGICO.md)
 
 ---
 
