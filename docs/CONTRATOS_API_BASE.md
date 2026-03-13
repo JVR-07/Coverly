@@ -6,10 +6,10 @@ Este documento define los contratos iniciales de comunicación entre frontend, b
 
 Su objetivo es:
 
-* Establecer interfaces claras desde el inicio
-* Permitir desarrollo paralelo
-* Reducir ambigüedad entre equipos
-* Proveer contexto estructurado para agentes AI
+- Establecer interfaces claras desde el inicio
+- Permitir desarrollo paralelo
+- Reducir ambigüedad entre equipos
+- Proveer contexto estructurado para agentes AI
 
 Estos contratos representan una **versión base evolutiva** y podrán expandirse iterativamente.
 
@@ -51,7 +51,28 @@ Encoding: `UTF-8`
   "success": false,
   "error": {
     "code": "ERROR_CODE",
-    "message": "Descripción del error"
+    "message": "Descripción del error",
+    "details": [] // Opcional: Arreglo de validaciones o reglas infringidas
+  }
+}
+```
+
+#### Manejo de Errores de Negocio
+
+Cuando el Motor de Recomendación o el Backend detectan una exclusión por reglas:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "BUSINESS_RULE_VIOLATION",
+    "message": "El cliente no es elegible para este producto.",
+    "details": [
+      {
+        "rule": "MIN_AGE_18",
+        "description": "El seguro de vida requiere mayoría de edad."
+      }
+    ]
   }
 }
 ```
@@ -66,7 +87,7 @@ Encoding: `UTF-8`
 
 Autentica a un usuario y devuelve el token de sesión.
 
-* Request Body:
+- Request Body:
 
 ```json
 {
@@ -75,7 +96,7 @@ Autentica a un usuario y devuelve el token de sesión.
 }
 ```
 
-* Response (`data`):
+- Response (`data`):
 
 ```json
 {
@@ -92,7 +113,7 @@ Autentica a un usuario y devuelve el token de sesión.
 
 Devuelve la información del usuario en sesión
 
-* Response (`data`):
+- Response (`data`):
 
 ```json
 {
@@ -113,22 +134,22 @@ Permite la gestión de cuentas para agentes, supervisores y administradores.
 
 Lista todos los usuarios del sistema.
 
-* **Query Params**: `?page=1&limit=10&role=agent`.
+- **Query Params**: `?page=1&limit=10&role=agent`.
 
-* **Response (`data`)**: Arreglo de objetos de usuario.
+- **Response (`data`)**: Arreglo de objetos de usuario.
 
 #### POST `/api/users`
 
 Crea un nuevo usuario.
 
-* Request Body:
+- Request Body:
 
 ```json
 {
   "name": "Juan Perez",
   "email": "juan.perez@coverly.com",
   "password": "SecurePassword123!",
-  "role": "agent" 
+  "role": "agent"
 }
 ```
 
@@ -136,7 +157,7 @@ Crea un nuevo usuario.
 
 Actualiza el rol o información de un usuario.
 
-* Request Body:
+- Request Body:
 
 ```json
 {
@@ -156,13 +177,13 @@ Gestiona el perfilamiento y la evaluación de riesgo de los clientes.
 
 Lista los clientes registrados.
 
-* **Query Params**: `?page=1&limit=10&search=nombre`.
+- **Query Params**: `?page=1&limit=10&search=nombre`.
 
 #### POST `/api/clients`
 
 Registra un nuevo cliente con todo su perfilamiento.
 
-* **Request Body**:
+- **Request Body**:
 
 ```json
 {
@@ -191,7 +212,7 @@ Registra un nuevo cliente con todo su perfilamiento.
 }
 ```
 
-* **Response (`data`):** El objeto completo del cliente creado incluyendo su id.
+- **Response (`data`):** El objeto completo del cliente creado incluyendo su id.
 
 #### GET `/api/clients/{id}`
 
@@ -211,32 +232,35 @@ Gestión de seguros, coberturas y restricciones.
 
 Lista el catálogo de productos.
 
-* **Query Params**: `?type=salud&isActive=true`.
+- **Query Params**: `?type=salud&isActive=true`.
 
 #### POST `/api/products`
 
-Crea un nuevo seguro en el sistema.
+Crea un nuevo seguro en el sistema, soportando el esquema de datos específico según la vertical.
 
-* Request Body:
+- Request Body (Ejemplo para Seguro de Auto):
 
 ```json
 {
   "name": "Seguro Auto Plus",
   "type": "auto",
   "description": "Cobertura amplia para vehículos de modelo reciente.",
-  "priceBase": 12000.00,
-  "coverages": [
-    "Daños materiales",
-    "Robo total",
-    "Responsabilidad civil"
-  ],
+  "priceBase": 12000.0,
+  "coverages": ["Daños materiales", "Robo total", "Responsabilidad civil"],
   "restrictions": [
     "Vehículos no mayores a 10 años",
     "Uso particular exclusivamente"
   ],
+  "specificData": {
+    "coverageRegion": "Nacional",
+    "maxVehicleAge": 10,
+    "hasSubstituteVehicle": true
+  },
   "isActive": true
 }
 ```
+
+_(Nota: El objeto `specificData` variará dependiendo de si el tipo es `vida`, `incendio` o `celular`)_
 
 #### GET `/api/products/{id}`
 
@@ -248,27 +272,59 @@ Actualiza un producto (precios, coberturas o restricciones).
 
 ---
 
-> Nota: Los siguientes endpoints son borradores, aún no se han definido en detalle.
-
 ### Recomendaciones (`/api/recommendations`)
 
-#### Generar recomendación
+Capa de conexión con el **Motor de Recomendación (Python)**.
 
-POST `/recommendations/evaluate`
+#### POST `/api/recommendations/evaluate`
+
+Envía el perfil del cliente para generar un scoring y recibir respuestas personalizadas basándose en el nivel de riesgo y capacidad económica.
+
+- Request Body:
 
 ```json
 {
-  "clientId": "uuid"
+  "clientId": "uuid",
+  "context": {
+    "requestedProducts": ["auto", "vida"]
+  }
 }
 ```
 
-Response:
+- Response (`data`):
 
 ```json
 {
-  "bestOption": {},
-  "alternatives": [],
-  "score": 0
+  "recommendationId": "uuid-recom",
+  "clientId": "uuid",
+  "status": "generated",
+  "globalScore": 85.5,
+  "recommendedProducts": [
+    {
+      "productId": "uuid-seguro-auto",
+      "name": "Seguro Auto Plus",
+      "type": "auto",
+      "matchScore": 92.0,
+      "reasons": [
+        "Ingreso compatible con suma asegurada",
+        "Historial de siniestralidad limpio en los últimos 5 años"
+      ],
+      "appliedPromotions": [
+        {
+          "promotionId": "uuid-promo",
+          "discountPercentage": 10
+        }
+      ],
+      "finalPrice": 10800.0
+    }
+  ],
+  "excludedProducts": [
+    {
+      "productId": "uuid-seguro-vida",
+      "name": "Seguro de Vida Flex",
+      "reason": "Exclusión por edad máxima superada (BUSINESS_RULE_EXCLUSION)"
+    }
+  ]
 }
 ```
 
@@ -280,7 +336,7 @@ Response:
 
 Obtiene las promociones vigentes que aplican al perfil de un cliente específico.
 
-* Response (`data`):
+- Response (`data`):
 
 ```json
 [
@@ -302,9 +358,9 @@ Obtiene las promociones vigentes que aplican al perfil de un cliente específico
 
 Genera métricas de rendimiento general (conversiones, rechazos).
 
-* **Query Params**: `?startDate=2026-01-01&endDate=2026-03-01`.
+- **Query Params**: `?startDate=2026-01-01&endDate=2026-03-01`.
 
-* Response (`data`):
+- Response (`data`):
 
 ```json
 {
@@ -312,7 +368,7 @@ Genera métricas de rendimiento general (conversiones, rechazos).
   "acceptedRecommendations": 45,
   "rejectedRecommendations": 105,
   "conversionRate": 30.0,
-  "totalRevenue": 540000.00
+  "totalRevenue": 540000.0
 }
 ```
 
@@ -320,9 +376,9 @@ Genera métricas de rendimiento general (conversiones, rechazos).
 
 Métricas de uso del sistema por agente.
 
-* **Query Params**: `?agentId=uuid`
+- **Query Params**: `?agentId=uuid`
 
-* Response (`data`):
+- Response (`data`):
 
 ```json
 {
@@ -339,13 +395,13 @@ Métricas de uso del sistema por agente.
 
 En iteraciones futuras se añadirán:
 
-* Versionado granular de endpoints
-* Webhooks
-* Streaming de eventos
-* Paginación avanzada
-* Filtros complejos
-* Rate limiting
-* Telemetría
+- Versionado granular de endpoints
+- Webhooks
+- Streaming de eventos
+- Paginación avanzada
+- Filtros complejos
+- Rate limiting
+- Telemetría
 
 ---
 
@@ -353,9 +409,9 @@ En iteraciones futuras se añadirán:
 
 Este contrato:
 
-* Permite iniciar implementación inmediata
-* Define lenguaje común del sistema
-* Reduce fricción de integración
-* Facilita automatización con IA
+- Permite iniciar implementación inmediata
+- Define lenguaje común del sistema
+- Reduce fricción de integración
+- Facilita automatización con IA
 
 Representa la base sobre la cual crecerá la comunicación interna de Coverly.
