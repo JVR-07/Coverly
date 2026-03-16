@@ -1,1 +1,37 @@
+#global dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Next.js
+.next/
+out/
+build/
+next-env.d.ts
+
+# Python (Engine)
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Prisma
+/coverly-core/app/generated/prisma
+
+# env and secrets
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# Docker
+.docker/
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
