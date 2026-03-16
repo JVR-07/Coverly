@@ -6,7 +6,8 @@
 
 El sistema deberá permitir:
 
-- Login seguro.
+- Login seguro (Email/Password).
+- **Gestión de Cuentas Centralizada:** Solo el Administrador puede crear cuentas. No existe el registro público.
 - Gestión de roles y permisos (Agente, Supervisor, Administrador).
 - Administración de cuentas.
 

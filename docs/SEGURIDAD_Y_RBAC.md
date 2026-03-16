@@ -28,7 +28,11 @@ El token almacenará el mínimo indispensable para evitar consultas saturadas a 
 
 ### C. Almacenamiento de Contraseñas
 
-Las contraseñas de los usuarios internos (`users.password_hash`) deben hashearse en Node.js/Next.js usando `bcrypt` o `argon2` con un mínimo de 10 "salts" (rondas). Está prohibido almacenar "plain text".
+Las contraseñas de los usuarios internos (`users.password_hash`) deben hashearse en Node.js/Next.js usando `bcryptjs` con un mínimo de 10 "salts" (rondas). Está terminantemente prohibido almacenar contraseñas en texto plano.
+
+### D. Creación de Usuarios
+
+Por seguridad corporativa, **la plataforma no cuenta con flujo de registro público (Sign Up)**. Todas las cuentas son dadas de alta exclusivamente por un usuario con rol `ADMIN` a través del módulo de Administración.
 
 ---
 
