@@ -81,7 +81,7 @@ La navegación se estructura mediante un menú lateral persistente que adapta su
 
 Para mantener la **identidad de producto** (Confianza y Modernidad), se utilizarán los siguientes estándares:
 
-- **Framework de UI:** [Tailwind CSS](https://tailwindcss.com/).
+- **Framework de UI:** [Tailwind CSS](https://tailwindcss.com/) + [NextUI](https://nextui.org/).
 - **Principios Visuales:**
   - **Glassmorphism sutil:** Para tarjetas y paneles laterales.
   - **Micro-interacciones:** Hovers en tarjetas de seguros y transiciones suaves entre pasos del registro.
