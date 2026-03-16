@@ -5,19 +5,19 @@ Este documento define las tecnologías elegidas para el desarrollo de Coverly, a
 ## 1. Tecnologías Base
 
 ### 1.1. Frontend y Backend Core
-*   **Framework:** **Next.js**. Al elegir Next.js, cubres el Front (React) y tu Backend Core (Node.js) bajo el mismo proyecto y despliegue. Las *API Routes* o *Server Actions* de Next.js actúan como tu Backend.
-*   **Lenguaje:** TypeScript (Para un tipado estricto, logrando mayor escalabilidad y menos bugs).
-*   **UI / Estética:** Tailwind CSS + Shadcn/UI (Esto te garantizará un diseño premium, moderno y rápido de construir).
-*   **Gestión de Estado (Frontend):** Zustand o React Context (según la complejidad que adquiera el Dashboard).
+
+- **Framework:** **Next.js**. Al elegir Next.js, cubres el Front (React) y tu Backend Core (Node.js) bajo el mismo proyecto y despliegue. Las _API Routes_ o _Server Actions_ de Next.js actúan como tu Backend.
+- **Lenguaje:** TypeScript (Para un tipado estricto, logrando mayor escalabilidad y menos bugs).
 
 ### 1.2. Motor de Recomendación (Microservicio)
-*   **Lenguaje:** Python 3.10+.
-*   **Framework:** FastAPI. (Es increíblemente rápido, fácil de escribir, y genera la documentación Swagger automáticamente; perfecto para conectar tu motor con el backend de Next.js).
-*   **Librerías sugeridas:** Pandas, Numpy, Scikit-learn (si decides agregar Machine Learning) o simple lógica algorítmica robusta.
+
+- **Lenguaje:** Python 3.10+.
+- **Framework:** FastAPI. (Es increíblemente rápido, fácil de escribir, y genera la documentación Swagger automáticamente; perfecto para conectar tu motor con el backend de Next.js).
 
 ### 1.3. Base de Datos
-*   **Motor principal:** PostgreSQL.
-*   **ORM (en el Web Core):** Prisma ORM o Drizzle ORM (excelente integración con TypeScript y Next.js para consultas seguras).
+
+- **Motor principal:** PostgreSQL.
+- **ORM (en el Web Core):** Prisma ORM (excelente integración con TypeScript y Next.js para consultas seguras).
 
 ---
 
@@ -26,15 +26,17 @@ Este documento define las tecnologías elegidas para el desarrollo de Coverly, a
 La separación en contenedores Docker es una excelente práctica.
 
 ### 2.1. Contenedores
+
 1.  **Contenedor Web (Next.js):** Contendrá el cliente web y la API transaccional.
 2.  **Contenedor Motor (Python/FastAPI):** Exclusivo para recibir el perfil del cliente, procesar las reglas de negocio y devolver el listado de seguros recomendados.
 
 ### 2.2. Alojamiento (Servicios de AWS)
-*   **Cómputo:** **AWS Elastic Beanstalk (Multi-container Docker).** 
-    *   **¿Cómo funciona?:** Mediante un archivo `docker-compose.yml`, le indicas a Elastic Beanstalk que levante ambos contenedores.
-    *   **Beneficio:** Elastic Beanstalk maneja la provisión de las máquinas (EC2), el balanceador de carga virtual (Application Load Balancer) y el auto-escalado según el tráfico.
-*   **Base de Datos:** **AWS RDS (Relational Database Service) para PostgreSQL.**
-    *   **Beneficio:** Instancia gestionada; no tienes que instalar Postgres a mano. Ofrece copias de seguridad automáticas y se integra directamente en la misma red privada (VPC) que tus Dockers por seguridad.
+
+- **Cómputo:** **AWS Elastic Beanstalk (Multi-container Docker).**
+  - **¿Cómo funciona?:** Mediante un archivo `docker-compose.yml`, le indicas a Elastic Beanstalk que levante ambos contenedores.
+  - **Beneficio:** Elastic Beanstalk maneja la provisión de las máquinas (EC2), el balanceador de carga virtual (Application Load Balancer) y el auto-escalado según el tráfico.
+- **Base de Datos:** **AWS RDS (Relational Database Service) para PostgreSQL.**
+  - **Beneficio:** Instancia gestionada; no tienes que instalar Postgres a mano. Ofrece copias de seguridad automáticas y se integra directamente en la misma red privada (VPC) que tus Dockers por seguridad.
 
 ---
 
