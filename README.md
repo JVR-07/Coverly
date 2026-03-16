@@ -5,11 +5,8 @@
 > This project (Coverly) has been created solely as an academic exercise to demonstrate knowledge in software architecture and full-stack development.
 >
 > 1. **Academic Nature:** All content, including the business logic, architecture, and documentation, is fictitious and intended for demonstration purposes only.
->
 > 2. **No Affiliation:** This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with any real insurance company or existing organization.
->
 > 3. **Non-Profit Use:** This software is distributed under the specified license (GPLv3) for non-profit educational purposes and is not intended for commercial use or production environments.
->
 
 ![Coverly-full-logo](coverly_full_logo.png)
 
@@ -54,15 +51,13 @@ El sistema sigue un estilo arquitectónico de Monolito Modular Cloud-Native, dis
 
 ### Stack Tecnológico
 
-**Frontend:** React + Vite (SPA) alojado en el mismo entorno o contenedor para simplificación inicial.
+**Core (Frontend/Backend):** Aplicación unificada construida con Next.js 16+ (App Router), React 19, y Tailwind CSS complementados con `@nextui-org/react`. Cuenta con **Prisma** como ORM para la persistencia, y usa `react-hook-form`, `zod`, y `bcryptjs` para la validación de formularios y seguridad de credenciales.
 
-**Backend:** Node.js (o Next.js) contenerizado.
+**Motor Inteligente:** Servicio aislado desarrollado en Python con **FastAPI** para la evaluación de reglas y scoring, listo para entornos contenerizados.
 
-**Motor Inteligente:** Servicio aislado (Python) para evaluación de reglas y scoring empacado en su propio contenedor Docker.
+**Base de Datos:** PostgreSQL gestionada e instanciada en local vía `docker-compose`, y prevista para migrar a servicios gestionados (AWS RDS) en producción.
 
-**Base de Datos:** PostgreSQL en AWS (RDS o EC2 de persistencia).
-
-**Infraestructura:** Despliegues gestionados a través de Multi-docker en AWS Elastic Beanstalk.
+**Infraestructura:** Despliegues gestionados a través de Docker y previstos para PaaS como AWS Elastic Beanstalk.
 
 ---
 
@@ -86,18 +81,17 @@ Coverly incluye:
 
 ## 📂 Estructura del Proyecto
 
-La documentación técnica se encuentra centralizada en el directorio `docs/.`
+La aplicación está dividida en dos componentes principales, apoyados de su documentación y herramientas de despliegue local:
 
 ```bash
 coverly/
+├── coverly-core/         # Sistema principal (Next.js, NextUI, Auth, Prisma)
+├── coverly-engine/       # Motor Inteligente de recomendaciones (Python, FastAPI)
 ├── docs/                 # Documentación técnica y funcional
-├── src/                  # Código fuente (Frontend/Backend)
-├── tests/                # Pruebas unitarias e integración
+├── docker-compose.yml    # Configuración de base de datos PostgreSQL local
 ├── LICENSE               # Licencia GNU GPLv3
 └── README.md             # Este archivo
 ```
-
-*Próximamente se agregarán las carpetas faltantes al repositorio.*
 
 ---
 
@@ -106,33 +100,54 @@ coverly/
 Sigue estos pasos para levantar un entorno de desarrollo local.
 
 ### Prerrequisitos
+
 Asegúrate de tener instalados:
+
 - Node.js (v20 o superior)
 - Python (v3.10 o superior)
 - Docker y Docker Compose
 - PostgreSQL (si decides instanciarla de forma local)
 
 ### Configuración del Entorno
+
 1. Copia el archivo de variables de entorno de ejemplo:
+
    ```bash
    cp .env.example .env
    ```
+
 2. Configura los valores necesarios de puerto, conexión a la DB y secretos en `.env`.
 
 ### Ejecución con Docker
-Para desplegar la aplicación completa usa Docker Compose:
+
+Para aprovisionar la base de datos requerida y otros servicios, desde la raíz del proyecto usa:
+
 ```bash
-docker-compose up -build
+docker-compose up -d
 ```
 
-### Ejecución Local
-Si optas por correr cada servicio independientemente:
-- **Core (Node/React):** `npm install` && `npm run dev`
-- **Motor de Recomendación (Python):** `pip install -r requirements.txt` && `python app.py`
+_(Nota: Se deben configurar las variables de entorno para que los contenedores sincronicen correctamente)._
 
-### Testing
-- Para pruebas del Core (Node): `npm run test`
-- Para el Motor Inteligente (Python): `pytest`
+### Ejecución Local
+
+Si optas por correr cada servicio independientemente (asegúrate de que la BD ya está corriendo):
+
+- **Core (Next.js):**
+
+  ```bash
+  cd coverly-core
+  npm install
+  npm run dev
+  ```
+
+- **Motor de Recomendación (Python/FastAPI):**
+
+  ```bash
+  cd coverly-engine
+  # Se recomienda crear tu venv: python -m venv venv && source venv/bin/activate
+  pip install -r requirements.txt
+  fastapi dev main.py
+  ```
 
 ---
 
