@@ -54,7 +54,7 @@ model Client {
 
 model Product {
   id                  String               @id @default(uuid())
-  name                String
+  name                String               @unique
   type                String               // AUTO, LIFE, FIRE, MOBILE
   description         String?
   priceBase           Decimal              @map("price_base") @db.Decimal(12, 2)
