@@ -1,13 +1,29 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1.router import api_router
 
-app = FastAPI()
+app = FastAPI(
+    title="Coverly Engine",
+    description="Motor Inteligente para la asignación dinámica de riesgos y generación de recomendaciones.",
+    version="0.1.0"
+)
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.include_router(api_router, prefix="/api/v1")
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "coverly-engine"}
