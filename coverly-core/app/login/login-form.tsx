@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Input, Button } from '@nextui-org/react';
-import { useActionState } from 'react';
-import { authenticate } from './actions';
+import { Input, Button } from "@nextui-org/react";
+import { useActionState } from "react";
+import { authenticate } from "./actions";
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
@@ -11,7 +11,10 @@ export default function LoginForm() {
   );
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 relative z-10 text-white">
+    <form
+      action={formAction}
+      className="flex flex-col gap-4 relative z-10 text-graphite"
+    >
       <Input
         name="email"
         type="email"
@@ -20,15 +23,16 @@ export default function LoginForm() {
         radius="sm"
         isRequired
         classNames={{
-          input: ["text-white"],
+          input: ["text-graphite"],
           inputWrapper: [
-            "border-neutral-700",
-            "hover:border-neutral-500",
-            "focus-within:!border-white"
-          ]
+            "border-gray-200",
+            "hover:border-gray-300",
+            "focus-within:!border-trust-blue",
+            "bg-white",
+          ],
         }}
       />
-      
+
       <Input
         name="password"
         type="password"
@@ -37,12 +41,13 @@ export default function LoginForm() {
         radius="sm"
         isRequired
         classNames={{
-          input: ["text-white"],
+          input: ["text-graphite"],
           inputWrapper: [
-            "border-neutral-700",
-            "hover:border-neutral-500",
-            "focus-within:!border-white"
-          ]
+            "border-gray-200",
+            "hover:border-gray-300",
+            "focus-within:!border-trust-blue",
+            "bg-white",
+          ],
         }}
       />
 
@@ -51,13 +56,13 @@ export default function LoginForm() {
         color="primary"
         radius="sm"
         isLoading={isPending}
-        className="mt-4 bg-white text-black font-semibold hover:bg-neutral-200 transition-colors"
+        className="mt-4 bg-trust-blue text-white font-semibold hover:bg-trust-blue-hover transition-colors shadow-md"
       >
         Iniciar Sesión
       </Button>
-      
+
       {errorMessage && (
-        <div className="mt-2 text-center text-sm text-red-400">
+        <div className="mt-2 text-center text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
           <p>{errorMessage}</p>
         </div>
       )}
