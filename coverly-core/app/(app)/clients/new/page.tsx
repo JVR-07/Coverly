@@ -70,10 +70,10 @@ export default function NuevoClientePage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-12">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-3xl font-bold text-trust-blue mb-2">
           Registrar Nuevo Cliente
         </h1>
-        <p className="text-neutral-400">
+        <p className="text-slate">
           Captura la información de perfilamiento base para la posterior
           recomendación AI.
         </p>
@@ -81,9 +81,9 @@ export default function NuevoClientePage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Section: Personal Data */}
-        <Card className="bg-neutral-900 border border-neutral-800">
-          <CardHeader className="px-6 py-4 border-b border-neutral-800">
-            <h2 className="text-lg font-semibold text-white">
+        <Card className="bg-white border border-gray-100 shadow-sm">
+          <CardHeader className="px-6 py-4 border-b border-gray-100">
+            <h2 className="text-lg font-semibold text-trust-blue">
               Datos Personales
             </h2>
           </CardHeader>
@@ -101,7 +101,7 @@ export default function NuevoClientePage() {
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -119,7 +119,7 @@ export default function NuevoClientePage() {
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -139,7 +139,7 @@ export default function NuevoClientePage() {
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -181,7 +181,7 @@ export default function NuevoClientePage() {
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -199,7 +199,7 @@ export default function NuevoClientePage() {
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -208,9 +208,9 @@ export default function NuevoClientePage() {
         </Card>
 
         {/* Section: Economic Profile */}
-        <Card className="bg-neutral-900 border border-neutral-800">
-          <CardHeader className="px-6 py-4 border-b border-neutral-800">
-            <h2 className="text-lg font-semibold text-white">
+        <Card className="bg-white border border-gray-100 shadow-sm">
+          <CardHeader className="px-6 py-4 border-b border-gray-100">
+            <h2 className="text-lg font-semibold text-trust-blue">
               Perfil Económico
             </h2>
           </CardHeader>
@@ -221,16 +221,18 @@ export default function NuevoClientePage() {
               render={({ field }) => (
                 <Input
                   {...field}
+                  value={field.value !== undefined ? String(field.value) : ""}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
                   type="number"
                   label="Ingreso Anual Aproximado (MXN)"
-                  startContent={<span className="text-neutral-500">$</span>}
+                  startContent={<span className="text-gray-500">$</span>}
                   isRequired
                   errorMessage={errors.economicProfile?.annualIncome?.message}
                   isInvalid={!!errors.economicProfile?.annualIncome}
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -248,7 +250,7 @@ export default function NuevoClientePage() {
                   variant="bordered"
                   classNames={{
                     inputWrapper:
-                      "border-neutral-700 focus-within:!border-white",
+                      "border-gray-200 focus-within:!border-trust-blue",
                   }}
                 />
               )}
@@ -260,6 +262,8 @@ export default function NuevoClientePage() {
                 render={({ field }) => (
                   <Input
                     {...field}
+                    value={field.value !== undefined ? String(field.value) : ""}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                     type="number"
                     label="Número de Dependientes Económicos"
                     isRequired
@@ -268,7 +272,7 @@ export default function NuevoClientePage() {
                     variant="bordered"
                     classNames={{
                       inputWrapper:
-                        "border-neutral-700 focus-within:!border-white",
+                        "border-gray-200 focus-within:!border-trust-blue",
                     }}
                   />
                 )}
@@ -278,9 +282,9 @@ export default function NuevoClientePage() {
         </Card>
 
         {/* Section: Interests and Risk */}
-        <Card className="bg-neutral-900 border border-neutral-800">
-          <CardHeader className="px-6 py-4 border-b border-neutral-800">
-            <h2 className="text-lg font-semibold text-white">
+        <Card className="bg-white border border-gray-100 shadow-sm">
+          <CardHeader className="px-6 py-4 border-b border-gray-100">
+            <h2 className="text-lg font-semibold text-trust-blue">
               Intereses y Riesgo Evaluado
             </h2>
           </CardHeader>
@@ -296,11 +300,32 @@ export default function NuevoClientePage() {
                   onChange={field.onChange}
                   errorMessage={errors.needs?.message}
                   isInvalid={!!errors.needs}
+                  classNames={{ label: "text-slate" }}
                 >
-                  <Checkbox value="AUTO">Auto</Checkbox>
-                  <Checkbox value="LIFE">Vida</Checkbox>
-                  <Checkbox value="FIRE">Hogar/Incendio</Checkbox>
-                  <Checkbox value="MOBILE">Móvil/Electrónicos</Checkbox>
+                  <Checkbox
+                    value="AUTO"
+                    classNames={{ label: "text-graphite" }}
+                  >
+                    Auto
+                  </Checkbox>
+                  <Checkbox
+                    value="LIFE"
+                    classNames={{ label: "text-graphite" }}
+                  >
+                    Vida
+                  </Checkbox>
+                  <Checkbox
+                    value="FIRE"
+                    classNames={{ label: "text-graphite" }}
+                  >
+                    Hogar/Incendio
+                  </Checkbox>
+                  <Checkbox
+                    value="MOBILE"
+                    classNames={{ label: "text-graphite" }}
+                  >
+                    Móvil
+                  </Checkbox>
                 </CheckboxGroup>
               )}
             />
@@ -320,18 +345,18 @@ export default function NuevoClientePage() {
                   <SelectItem
                     key="LOW"
                     value="LOW"
-                    className="text-emerald-400"
+                    className="text-emerald-500"
                   >
                     Bajo Riesgo
                   </SelectItem>
                   <SelectItem
                     key="MEDIUM"
                     value="MEDIUM"
-                    className="text-yellow-400"
+                    className="text-yellow-600"
                   >
                     Riesgo Medio
                   </SelectItem>
-                  <SelectItem key="HIGH" value="HIGH" className="text-red-400">
+                  <SelectItem key="HIGH" value="HIGH" className="text-red-500">
                     Alto Riesgo
                   </SelectItem>
                 </Select>
