@@ -11,59 +11,83 @@ export default function LoginForm() {
   );
 
   return (
-    <form
-      action={formAction}
-      className="flex flex-col gap-4 relative z-10 text-graphite"
-    >
-      <Input
-        name="email"
-        type="email"
-        label="Correo Electrónico"
-        variant="bordered"
-        radius="sm"
-        isRequired
-        classNames={{
-          input: ["text-graphite"],
-          inputWrapper: [
-            "border-gray-200",
-            "hover:border-gray-300",
-            "focus-within:!border-trust-blue",
-            "bg-white",
-          ],
-        }}
-      />
+    <form action={formAction} className="flex flex-col gap-5 relative z-10">
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor="email"
+          className="text-sm font-bold text-trust-blue px-0.5"
+        >
+          Correo Electrónico
+        </label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="ejemplo@correo.com"
+          variant="bordered"
+          isRequired
+          classNames={{
+            input:
+              "text-graphite placeholder:text-slate/40 text-base py-0 h-full",
+            inputWrapper: [
+              "border-gray-200",
+              "hover:border-trust-blue/30",
+              "focus-within:!border-trust-blue",
+              "bg-white",
+              "shadow-sm",
+              "h-14",
+              "px-5",
+              "flex items-center",
+              "rounded-3xl",
+            ],
+          }}
+        />
+      </div>
 
-      <Input
-        name="password"
-        type="password"
-        label="Contraseña"
-        variant="bordered"
-        radius="sm"
-        isRequired
-        classNames={{
-          input: ["text-graphite"],
-          inputWrapper: [
-            "border-gray-200",
-            "hover:border-gray-300",
-            "focus-within:!border-trust-blue",
-            "bg-white",
-          ],
-        }}
-      />
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor="password"
+          className="text-sm font-bold text-trust-blue px-0.5"
+        >
+          Contraseña
+        </label>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="••••••••"
+          variant="bordered"
+          isRequired
+          classNames={{
+            input:
+              "text-graphite placeholder:text-slate/40 text-base py-0 h-full",
+            inputWrapper: [
+              "border-gray-200",
+              "hover:border-trust-blue/30",
+              "focus-within:!border-trust-blue",
+              "bg-white",
+              "shadow-sm",
+              "h-14",
+              "px-5",
+              "flex items-center",
+              "rounded-3xl",
+            ],
+          }}
+        />
+      </div>
 
       <Button
         type="submit"
         color="primary"
-        radius="sm"
         isLoading={isPending}
-        className="mt-4 bg-trust-blue text-white font-semibold hover:bg-trust-blue-hover transition-colors shadow-md"
+        className="mt-4 bg-trust-blue text-white font-bold h-14 shadow-lg hover:shadow-trust-blue/20 hover:scale-[1.01] transition-all active:scale-[0.98] rounded-3xl"
       >
         Iniciar Sesión
       </Button>
 
       {errorMessage && (
-        <div className="mt-2 text-center text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
-          <p>{errorMessage}</p>
+        <div className="mt-2 text-center text-sm font-medium text-red-600 bg-red-50 p-4 rounded-2xl border border-red-100 flex items-center justify-center gap-2">
+          <span>⚠️</span> {errorMessage}
         </div>
       )}
     </form>
