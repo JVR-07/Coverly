@@ -104,3 +104,15 @@ model RecommendedProduct {
   @@id([recommendationId, productId])
   @@map("recommended_products")
 }
+
+model Promotion {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  discountPercent Decimal? @map("discount_percent") @db.Decimal(5, 2)
+  isActive        Boolean  @default(true) @map("is_active")
+  expiresAt       DateTime? @map("expires_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("promotions")
+}
