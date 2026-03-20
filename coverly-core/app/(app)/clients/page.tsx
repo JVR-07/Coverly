@@ -10,6 +10,7 @@ import {
   TableCell,
   Chip,
   Button,
+  Skeleton,
 } from "@nextui-org/react";
 import Link from "next/link";
 import { format } from "date-fns";
@@ -78,8 +79,16 @@ export default function MisClientesPage() {
       </header>
 
       {loading ? (
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm p-4 space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="flex items-center gap-4 py-2">
+              <Skeleton className="rounded-lg w-40 h-5" />
+              <Skeleton className="rounded-lg w-48 h-5" />
+              <Skeleton className="rounded-lg w-24 h-5" />
+              <Skeleton className="rounded-lg w-20 h-6" />
+              <Skeleton className="rounded-lg w-32 h-5" />
+            </div>
+          ))}
         </div>
       ) : (
         <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">

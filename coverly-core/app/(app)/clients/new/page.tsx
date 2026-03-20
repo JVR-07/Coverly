@@ -24,6 +24,7 @@ export default function NuevoClientePage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorStatus, setErrorStatus] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const {
     control,
@@ -59,7 +60,8 @@ export default function NuevoClientePage() {
       if (!res.ok)
         throw new Error(result.error?.message || "Error al crear cliente.");
 
-      router.push("/dashboard");
+      setSuccessMessage("Cliente registrado correctamente. Redirigiendo...");
+      setTimeout(() => router.push("/dashboard"), 2000);
     } catch (err: any) {
       setErrorStatus(err.message);
     } finally {
@@ -364,6 +366,13 @@ export default function NuevoClientePage() {
             />
           </CardBody>
         </Card>
+
+        {successMessage && (
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+            <span>✓</span>
+            {successMessage}
+          </div>
+        )}
 
         {errorStatus && (
           <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-lg text-sm">
