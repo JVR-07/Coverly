@@ -9,7 +9,6 @@ export default async function DashboardPage() {
   const userId = session?.user?.id;
   const isAdmin = session?.user?.role === "ADMIN";
 
-  // Conteos dinámicos desde la base de datos
   const [clientCount, recommendationCount, latestClients] = await Promise.all([
     prisma.client.count({
       where: isAdmin ? {} : { agentId: userId },
@@ -105,7 +104,9 @@ export default async function DashboardPage() {
                   <p className="font-semibold text-graphite">
                     {client.firstName} {client.lastName}
                   </p>
-                  <p className="text-sm text-slate">{client.email || "Sin correo"}</p>
+                  <p className="text-sm text-slate">
+                    {client.email || "Sin correo"}
+                  </p>
                 </div>
                 <div className="flex items-center gap-3">
                   {client.riskLevel && (
