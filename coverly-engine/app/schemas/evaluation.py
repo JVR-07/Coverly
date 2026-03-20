@@ -7,6 +7,8 @@ class ContextSchema(BaseModel):
 class EvaluateRequest(BaseModel):
     clientId: str
     context: ContextSchema
+    economicProfile: Optional[dict] = None
+    riskLevel: Optional[str] = None
 
 class PromotionSchema(BaseModel):
     promotionId: str
