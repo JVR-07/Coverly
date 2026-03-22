@@ -30,12 +30,12 @@ interface Recommendation {
 
 const statusMap: Record<
   string,
-  { label: string; color: "success" | "warning" | "danger" | "default" }
+  { label: string; bg: string; text: string }
 > = {
-  GENERATED: { label: "Generada", color: "default" },
-  PRESENTED: { label: "Presentada", color: "warning" },
-  ACCEPTED: { label: "Aceptada", color: "success" },
-  REJECTED: { label: "Rechazada", color: "danger" },
+  GENERATED: { label: "Generada", bg: "bg-gray-100", text: "text-gray-700" },
+  PRESENTED: { label: "Presentada", bg: "bg-yellow-100", text: "text-yellow-700" },
+  ACCEPTED: { label: "Aceptada", bg: "bg-emerald-100", text: "text-emerald-700" },
+  REJECTED: { label: "Rechazada", bg: "bg-red-100", text: "text-red-700" },
 };
 
 export default function RecommendationsPage() {
@@ -96,7 +96,7 @@ export default function RecommendationsPage() {
                 href={`/recommendations/${rec.id}`}
                 className="group"
               >
-                <Card className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 group-hover:border-insight-teal/30">
+                <Card className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all overflow-hidden duration-200 group-hover:border-insight-teal">
                   <CardBody className="p-6">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -114,9 +114,9 @@ export default function RecommendationsPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Chip size="sm" color={st.color} variant="flat">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${st.bg} ${st.text}`}>
                           {st.label}
-                        </Chip>
+                        </span>
                       </div>
                     </div>
 
@@ -137,23 +137,19 @@ export default function RecommendationsPage() {
                         </p>
                         <div className="flex flex-wrap gap-1">
                           {rec.products.slice(0, 3).map((p) => (
-                            <Chip
+                            <div
                               key={p.productId}
-                              size="sm"
-                              variant="flat"
-                              className="text-[10px] bg-soft-light text-graphite"
+                              className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-trust-blue text-white shadow-sm shrink-0"
                             >
                               {p.product.type}
-                            </Chip>
+                            </div>
                           ))}
                           {rec.products.length > 3 && (
-                            <Chip
-                              size="sm"
-                              variant="flat"
-                              className="text-[10px] bg-gray-100 text-slate"
+                            <div
+                              className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-slate shadow-sm shrink-0"
                             >
                               +{rec.products.length - 3}
-                            </Chip>
+                            </div>
                           )}
                         </div>
                       </div>

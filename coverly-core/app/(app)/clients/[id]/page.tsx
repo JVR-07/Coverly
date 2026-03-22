@@ -164,18 +164,19 @@ export default function ClientDetailPage() {
         </div>
         <Button
           color="primary"
-          className="bg-insight-teal text-white font-medium"
+          radius="full"
+          className="bg-insight-teal text-white font-semibold flex items-center justify-center text-center h-auto min-h-10 py-2.5 leading-tight shadow-md hover:shadow-lg transition-all"
           isLoading={generating}
           startContent={
             generating ? (
-              <Loader2 size={16} className="animate-coverly-spin" />
+              <Loader2 size={16} className="animate-coverly-spin shrink-0" />
             ) : (
-              <BrainCircuit size={16} />
+              <BrainCircuit size={16} className="shrink-0" />
             )
           }
           onPress={handleGenerateRecommendation}
         >
-          Generar Recomendación
+          <span>Generar Recomendación</span>
         </Button>
       </header>
 
@@ -260,14 +261,12 @@ export default function ClientDetailPage() {
           </h2>
           <div className="flex flex-wrap gap-2">
             {client.needs.map((need) => (
-              <Chip
+              <div
                 key={need}
-                size="md"
-                variant="flat"
-                className="capitalize bg-trust-blue/10 text-trust-blue"
+                className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-trust-blue text-white shadow-sm"
               >
                 {need}
-              </Chip>
+              </div>
             ))}
           </div>
         </section>

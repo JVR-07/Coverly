@@ -10,13 +10,14 @@ export default async function DashboardPage() {
   const userId = session?.user?.id;
   const isAdmin = session?.user?.role === "ADMIN";
 
-  const [clientCount, recommendationCount, latestClients] = await Promise.all([
+  const [clientCount, recommendationCount, productCount, latestClients] = await Promise.all([
     prisma.client.count({
       where: isAdmin ? {} : { agentId: userId },
     }),
     prisma.recommendation.count({
       where: isAdmin ? {} : { agentId: userId },
     }),
+    prisma.product.count(),
     prisma.client.findMany({
       where: isAdmin ? {} : { agentId: userId },
       orderBy: { createdAt: "desc" },
@@ -53,7 +54,7 @@ export default async function DashboardPage() {
         <p className="text-slate">Tus datos en tiempo real.</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="p-6 bg-white rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-2 h-full bg-trust-blue"></div>
           <h3 className="text-sm font-semibold text-slate mb-1">Rol actual</h3>
@@ -73,10 +74,20 @@ export default async function DashboardPage() {
         <div className="p-6 bg-white rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-2 h-full bg-green-500"></div>
           <h3 className="text-sm font-semibold text-slate mb-1">
-            Recomendaciones Generadas
+            Descubrimientos AI
           </h3>
           <p className="text-2xl font-bold text-green-600">
             {recommendationCount}
+          </p>
+        </div>
+
+        <div className="p-6 bg-white rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-2 h-full bg-purple-500"></div>
+          <h3 className="text-sm font-semibold text-slate mb-1">
+            Catálogo Total
+          </h3>
+          <p className="text-2xl font-bold text-purple-600">
+            {productCount}
           </p>
         </div>
       </div>
@@ -95,14 +106,15 @@ export default async function DashboardPage() {
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="flex flex-col gap-1">
             {latestClients.map((client) => (
-              <div
+              <Link
+                href={`/clients/${client.id}`}
                 key={client.id}
-                className="flex items-center justify-between py-3"
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-soft-light transition-colors cursor-pointer group"
               >
                 <div>
-                  <p className="font-semibold text-graphite">
+                  <p className="font-semibold text-graphite group-hover:text-trust-blue transition-colors">
                     {client.firstName} {client.lastName}
                   </p>
                   <p className="text-sm text-slate">
@@ -112,7 +124,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center gap-3">
                   {client.riskLevel && (
                     <span
-                      className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                         riskColorMap[client.riskLevel] ||
                         "bg-gray-100 text-gray-600"
                       }`}
@@ -125,14 +137,8 @@ export default async function DashboardPage() {
                       locale: es,
                     })}
                   </span>
-                  <Link
-                    href={`/clients/${client.id}`}
-                    className="text-xs text-trust-blue hover:underline"
-                  >
-                    Ver →
-                  </Link>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

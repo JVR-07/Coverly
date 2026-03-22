@@ -43,14 +43,10 @@ export default function MisClientesPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const riskColorMap: Record<
-    string,
-    "success" | "warning" | "danger" | "default"
-  > = {
-    LOW: "success",
-    MEDIUM: "warning",
-    HIGH: "danger",
-    default: "default",
+  const riskColorMap: Record<string, string> = {
+    LOW: "bg-emerald-100 text-emerald-700",
+    MEDIUM: "bg-yellow-100 text-yellow-700",
+    HIGH: "bg-red-100 text-red-700",
   };
 
   const riskLabelMap: Record<string, string> = {
@@ -74,7 +70,8 @@ export default function MisClientesPage() {
           as={Link}
           href="/clients/new"
           color="primary"
-          className="font-medium"
+          radius="full"
+          className="bg-insight-teal text-white font-semibold"
         >
           ＋ Nuevo Cliente
         </Button>
@@ -97,9 +94,9 @@ export default function MisClientesPage() {
           <Table
             aria-label="Tabla de clientes"
             classNames={{
-              wrapper: "bg-transparent p-0",
-              th: "bg-gray-50 text-slate font-semibold text-sm py-4 border-b border-gray-100 uppercase tracking-wider",
-              td: "py-4 border-b border-gray-50",
+              wrapper: "bg-transparent p-0 overflow-x-auto w-full block",
+              th: "bg-gray-50 text-slate font-semibold text-sm py-4 border-b border-gray-100 uppercase tracking-wider whitespace-nowrap",
+              td: "py-4 border-b border-gray-50 whitespace-nowrap",
               tr: "cursor-pointer",
             }}
             selectionMode="single"
@@ -130,28 +127,26 @@ export default function MisClientesPage() {
                     })}
                   </TableCell>
                   <TableCell>
-                    <Chip
-                      color={riskColorMap[client.riskLevel] || "default"}
-                      size="sm"
-                      variant="dot"
-                      className="border-none"
+                    <span
+                      className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                        riskColorMap[client.riskLevel] ||
+                        "bg-gray-100 text-gray-600"
+                      }`}
                     >
                       {riskLabelMap[client.riskLevel] ||
                         client.riskLevel ||
                         "N/A"}
-                    </Chip>
+                    </span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1 flex-wrap">
+                    <div className="flex gap-1.5 flex-wrap">
                       {client.needs.map((need) => (
-                        <Chip
+                        <div
                           key={need}
-                          size="sm"
-                          variant="flat"
-                          className="bg-trust-blue/10 text-trust-blue border border-trust-blue/20"
+                          className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-trust-blue text-white"
                         >
                           {need}
-                        </Chip>
+                        </div>
                       ))}
                     </div>
                   </TableCell>

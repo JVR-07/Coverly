@@ -41,11 +41,11 @@ interface Recommendation {
   products: RecommendedProduct[];
 }
 
-const statusMap: Record<string, { label: string; color: "success" | "warning" | "danger" | "default" }> = {
-  GENERATED: { label: "Generada", color: "default" },
-  PRESENTED: { label: "Presentada", color: "warning" },
-  ACCEPTED: { label: "Aceptada", color: "success" },
-  REJECTED: { label: "Rechazada", color: "danger" },
+const statusMap: Record<string, { label: string; bg: string; text: string }> = {
+  GENERATED: { label: "Generada", bg: "bg-gray-100", text: "text-gray-700" },
+  PRESENTED: { label: "Presentada", bg: "bg-yellow-100", text: "text-yellow-700" },
+  ACCEPTED: { label: "Aceptada", bg: "bg-emerald-100", text: "text-emerald-700" },
+  REJECTED: { label: "Rechazada", bg: "bg-red-100", text: "text-red-700" },
 };
 
 const typeIconMap: Record<string, string> = {
@@ -63,7 +63,6 @@ export default function RecommendationDetailPage() {
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetch(`/api/recommendations/${id}`)
@@ -93,17 +92,7 @@ export default function RecommendationDetailPage() {
     }
   };
 
-  const toggleCompare = (productId: string) => {
-    setCompareIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(productId)) {
-        next.delete(productId);
-      } else if (next.size < 3) {
-        next.add(productId);
-      }
-      return next;
-    });
-  };
+
 
   if (loading) {
     return (
@@ -144,7 +133,6 @@ export default function RecommendationDetailPage() {
   }
 
   const st = statusMap[recommendation.status] || statusMap.GENERATED;
-  const comparedProducts = recommendation.products.filter((p) => compareIds.has(p.productId));
 
   return (
     <div className="space-y-6">
@@ -181,9 +169,9 @@ export default function RecommendationDetailPage() {
               Score Global
             </p>
           </div>
-          <Chip size="md" color={st.color} variant="flat" className="text-sm">
+          <span className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full ${st.bg} ${st.text}`}>
             {st.label}
-          </Chip>
+          </span>
         </div>
       </header>
 
@@ -195,7 +183,8 @@ export default function RecommendationDetailPage() {
           <Button
             size="sm"
             color="success"
-            variant="flat"
+            className="text-white font-semibold shadow-sm"
+            radius="full"
             isLoading={updating}
             onPress={() => updateStatus("ACCEPTED")}
           >
@@ -205,6 +194,8 @@ export default function RecommendationDetailPage() {
             size="sm"
             color="danger"
             variant="flat"
+            className="font-semibold shadow-sm text-red-600 bg-red-50 hover:bg-red-100 border border-red-200"
+            radius="full"
             isLoading={updating}
             onPress={() => updateStatus("REJECTED")}
           >
@@ -221,25 +212,19 @@ export default function RecommendationDetailPage() {
           <h2 className="text-xl font-bold text-graphite">
             Productos Recomendados ({recommendation.products.length})
           </h2>
-          {compareIds.size > 0 && (
-            <Chip size="sm" color="secondary" variant="flat">
-              {compareIds.size}/3 seleccionados para comparar
-            </Chip>
-          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {recommendation.products.map((rp, index) => {
-            const isSelected = compareIds.has(rp.productId);
             const icon = typeIconMap[rp.product.type] || "📦";
             return (
               <Card
                 key={rp.productId}
-                className={`bg-white border shadow-sm hover:shadow-md transition-all duration-200 ${
+                className={`bg-white border rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden ${
                   index === 0
                     ? "border-insight-teal/40 ring-1 ring-insight-teal/20"
-                    : "border-gray-100"
-                } ${isSelected ? "ring-2 ring-trust-blue/40 border-trust-blue/30" : ""}`}
+                    : "border-gray-100 hover:border-insight-teal"
+                }`}
               >
                 <CardHeader className="px-6 pt-5 pb-2">
                   <div className="flex items-start justify-between w-full">
@@ -249,19 +234,15 @@ export default function RecommendationDetailPage() {
                         <p className="font-bold text-trust-blue text-lg leading-tight">
                           {rp.product.name}
                         </p>
-                        <Chip
-                          size="sm"
-                          variant="flat"
-                          className="mt-1 capitalize bg-trust-blue/10 text-trust-blue text-[10px]"
-                        >
+                        <div className="mt-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-trust-blue text-white shadow-sm self-start inline-block">
                           {rp.product.type}
-                        </Chip>
+                        </div>
                       </div>
                     </div>
                     {index === 0 && (
-                      <Chip size="sm" color="success" variant="flat" className="text-[10px]">
+                      <div className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 shrink-0">
                         ⭐ Mejor opción
-                      </Chip>
+                      </div>
                     )}
                   </div>
                 </CardHeader>
@@ -312,17 +293,6 @@ export default function RecommendationDetailPage() {
                       ))}
                     </ul>
                   </div>
-
-                  <Button
-                    size="sm"
-                    variant={isSelected ? "solid" : "bordered"}
-                    color={isSelected ? "primary" : "default"}
-                    className="w-full mt-2"
-                    isDisabled={!isSelected && compareIds.size >= 3}
-                    onPress={() => toggleCompare(rp.productId)}
-                  >
-                    {isSelected ? "✓ En comparación" : "Agregar a comparador"}
-                  </Button>
                 </CardBody>
               </Card>
             );
@@ -330,127 +300,6 @@ export default function RecommendationDetailPage() {
         </div>
       </section>
 
-      {/* Comparador de seguros */}
-      {comparedProducts.length >= 2 && (
-        <section className="mt-8">
-          <Divider className="bg-gray-100 mb-6" />
-          <h2 className="text-xl font-bold text-trust-blue mb-4">
-            Comparador de Seguros
-          </h2>
-
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr>
-                  <th className="text-left text-xs text-slate uppercase tracking-wider p-3 bg-soft-light border-b border-gray-200 w-40">
-                    Característica
-                  </th>
-                  {comparedProducts.map((p) => (
-                    <th
-                      key={p.productId}
-                      className="text-center text-sm font-bold text-trust-blue p-3 bg-soft-light border-b border-gray-200"
-                    >
-                      <span className="text-xl mr-1">
-                        {typeIconMap[p.product.type] || "📦"}
-                      </span>
-                      {p.product.name}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-gray-100">
-                  <td className="text-xs font-semibold text-slate uppercase tracking-wider p-3">
-                    Tipo
-                  </td>
-                  {comparedProducts.map((p) => (
-                    <td key={p.productId} className="text-center p-3">
-                      <Chip
-                        size="sm"
-                        variant="flat"
-                        className="capitalize bg-trust-blue/10 text-trust-blue"
-                      >
-                        {p.product.type}
-                      </Chip>
-                    </td>
-                  ))}
-                </tr>
-                <tr className="border-b border-gray-100">
-                  <td className="text-xs font-semibold text-slate uppercase tracking-wider p-3">
-                    Match Score
-                  </td>
-                  {comparedProducts.map((p) => {
-                    const score = Number(p.matchScore);
-                    const best = Math.max(...comparedProducts.map((cp) => Number(cp.matchScore)));
-                    return (
-                      <td
-                        key={p.productId}
-                        className={`text-center p-3 text-lg font-bold ${
-                          score === best ? "text-insight-teal" : "text-graphite"
-                        }`}
-                      >
-                        {score.toFixed(1)}%
-                        {score === best && (
-                          <span className="text-xs ml-1">⭐</span>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-                <tr className="border-b border-gray-100">
-                  <td className="text-xs font-semibold text-slate uppercase tracking-wider p-3">
-                    Precio Base
-                  </td>
-                  {comparedProducts.map((p) => (
-                    <td key={p.productId} className="text-center p-3 text-sm text-slate">
-                      ${Number(p.product.priceBase).toLocaleString("es-MX")} MXN
-                    </td>
-                  ))}
-                </tr>
-                <tr className="border-b border-gray-100 bg-insight-teal/5">
-                  <td className="text-xs font-semibold text-slate uppercase tracking-wider p-3">
-                    Precio Final
-                  </td>
-                  {comparedProducts.map((p) => {
-                    const price = Number(p.finalPrice);
-                    const best = Math.min(...comparedProducts.map((cp) => Number(cp.finalPrice)));
-                    return (
-                      <td
-                        key={p.productId}
-                        className={`text-center p-3 text-lg font-bold ${
-                          price === best ? "text-insight-teal" : "text-graphite"
-                        }`}
-                      >
-                        ${price.toLocaleString("es-MX")}
-                        {price === best && (
-                          <span className="text-xs ml-1">💰</span>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-                <tr className="border-b border-gray-100">
-                  <td className="text-xs font-semibold text-slate uppercase tracking-wider p-3">
-                    Justificación
-                  </td>
-                  {comparedProducts.map((p) => (
-                    <td key={p.productId} className="p-3 align-top">
-                      <ul className="space-y-1">
-                        {(p.justifications || []).map((j, i) => (
-                          <li key={i} className="text-xs text-graphite flex items-start gap-1">
-                            <span className="text-insight-teal shrink-0">•</span>
-                            {j}
-                          </li>
-                        ))}
-                      </ul>
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
     </div>
   );
 }

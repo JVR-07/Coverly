@@ -101,6 +101,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.personalData?.firstName?.message}
                   isInvalid={!!errors.personalData?.firstName}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -119,6 +120,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.personalData?.lastName?.message}
                   isInvalid={!!errors.personalData?.lastName}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -139,6 +141,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.personalData?.dateOfBirth?.message}
                   isInvalid={!!errors.personalData?.dateOfBirth}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -157,6 +160,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.personalData?.gender?.message}
                   isInvalid={!!errors.personalData?.gender}
                   variant="bordered"
+                  labelPlacement="outside"
                 >
                   <SelectItem key="M" value="M">
                     Masculino
@@ -181,6 +185,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.personalData?.contact?.email?.message}
                   isInvalid={!!errors.personalData?.contact?.email}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -199,6 +204,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.personalData?.contact?.phone?.message}
                   isInvalid={!!errors.personalData?.contact?.phone}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -232,6 +238,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.economicProfile?.annualIncome?.message}
                   isInvalid={!!errors.economicProfile?.annualIncome}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -250,6 +257,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.economicProfile?.occupation?.message}
                   isInvalid={!!errors.economicProfile?.occupation}
                   variant="bordered"
+                  labelPlacement="outside"
                   classNames={{
                     inputWrapper:
                       "border-gray-200 focus-within:!border-trust-blue",
@@ -272,6 +280,7 @@ export default function NuevoClientePage() {
                     errorMessage={errors.economicProfile?.dependents?.message}
                     isInvalid={!!errors.economicProfile?.dependents}
                     variant="bordered"
+                  labelPlacement="outside"
                     classNames={{
                       inputWrapper:
                         "border-gray-200 focus-within:!border-trust-blue",
@@ -343,6 +352,7 @@ export default function NuevoClientePage() {
                   errorMessage={errors.riskLevel?.message}
                   isInvalid={!!errors.riskLevel}
                   variant="bordered"
+                  labelPlacement="outside"
                 >
                   <SelectItem
                     key="LOW"
@@ -386,7 +396,7 @@ export default function NuevoClientePage() {
             color="primary"
             isLoading={isSubmitting}
             size="lg"
-            className="px-8 font-semibold"
+            className="w-full md:w-auto px-8 font-semibold"
           >
             Registrar Perfil Cliente
           </Button>

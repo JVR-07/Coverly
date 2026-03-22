@@ -8,10 +8,12 @@ import {
   Users,
   UserPlus,
   BrainCircuit,
+  LogOut,
 } from "lucide-react";
 import { type ReactNode } from "react";
+import { signOut } from "next-auth/react";
 
-export default function Sidebar() {
+export default function Sidebar({ userEmail, userRole }: { userEmail?: string | null, userRole?: string | null }) {
   const pathname = usePathname();
 
   const links: { href: string; label: string; icon: ReactNode }[] = [
@@ -26,11 +28,6 @@ export default function Sidebar() {
       icon: <ShieldCheck size={20} />,
     },
     { href: "/clients", label: "Mis Clientes", icon: <Users size={20} /> },
-    {
-      href: "/clients/new",
-      label: "Nuevo Cliente",
-      icon: <UserPlus size={20} />,
-    },
     {
       href: "/recommendations",
       label: "Recomendaciones",
@@ -65,10 +62,19 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <div className="p-4 border-t border-white/10">
-        <p className="text-xs text-white/50 text-center uppercase tracking-widest font-semibold">
-          Version 0.3.0 Beta
-        </p>
+      <div className="p-4 border-t border-white/10 flex flex-col gap-3">
+        {(userEmail || userRole) && (
+          <div className="flex flex-col mb-1 px-2">
+            <span className="text-sm font-semibold text-white truncate">{userEmail}</span>
+            <span className="text-[10px] text-insight-teal font-medium uppercase tracking-widest">{userRole}</span>
+          </div>
+        )}
+        <button
+          onClick={() => signOut()}
+          className="flex items-center gap-2 justify-center w-full text-xs px-3 py-2 rounded-lg bg-red-500/10 text-red-100 hover:bg-red-500/30 border border-red-500/30 font-bold transition-all"
+        >
+          <LogOut size={16} /> Cerrar Sesión
+        </button>
       </div>
     </aside>
   );

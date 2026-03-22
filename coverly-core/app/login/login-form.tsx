@@ -1,14 +1,18 @@
 "use client";
 
 import { Input, Button } from "@nextui-org/react";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { authenticate } from "./actions";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
   );
+  
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
     <form action={formAction} className="flex flex-col gap-5 relative z-10">
@@ -54,10 +58,19 @@ export default function LoginForm() {
         <Input
           id="password"
           name="password"
-          type="password"
+          type={isVisible ? "text" : "password"}
           placeholder="••••••••"
           variant="bordered"
           isRequired
+          endContent={
+            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+              {isVisible ? (
+                <EyeOff className="text-xl text-slate pointer-events-none" />
+              ) : (
+                <Eye className="text-xl text-slate pointer-events-none" />
+              )}
+            </button>
+          }
           classNames={{
             input:
               "text-graphite placeholder:text-slate/40 text-base py-0 h-full",
