@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { authConfig } from "./auth.config";
 import { prisma } from "./lib/prisma";
+import { logger } from "./lib/logger";
 
 async function getUser(email: string) {
   try {
@@ -12,7 +13,7 @@ async function getUser(email: string) {
     });
     return user;
   } catch (error) {
-    console.error("Failed to fetch user:", error);
+    logger.error("Error al obtener usuario", { route: "auth/getUser" });
     throw new Error("Failed to fetch user.");
   }
 }
@@ -44,7 +45,6 @@ export const {
           if (passwordsMatch) return user;
         }
 
-        console.log("Invalid credentials");
         return null;
       },
     }),

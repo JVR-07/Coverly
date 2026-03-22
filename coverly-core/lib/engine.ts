@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { logger } from "./logger";
 
 const ENGINE_BASE_URL = process.env.ENGINE_URL;
 
@@ -84,21 +85,19 @@ export async function evaluateClient(
       lastError = error;
 
       if (error.message?.startsWith("HTTP ")) {
-        console.error("Engine Logic Error:", error.message);
+        logger.error("Error de lógica en el motor", { route: "/engine/evaluate", error: error.message });
         throw new Error(`Error en el motor: ${error.message}`);
       }
 
       if (attempt < MAX_RETRIES - 1) {
         const delay = RETRY_DELAYS_MS[attempt];
-        console.warn(
-          `Engine: intento ${attempt + 1} fallido. Reintentando en ${delay}ms...`,
-        );
+        logger.warn("Reintentando conexión con el motor", { attempt: attempt + 1, delay });
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
 
-  console.error("Engine Connection Error tras reintentos:", lastError);
+  logger.error("Motor no disponible tras reintentos", { attempts: MAX_RETRIES });
   throw new Error(
     `Motor no disponible tras ${MAX_RETRIES} intentos: ${lastError?.message}`,
   );
