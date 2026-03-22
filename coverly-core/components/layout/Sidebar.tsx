@@ -2,16 +2,40 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  ShieldCheck,
+  Users,
+  UserPlus,
+  BrainCircuit,
+} from "lucide-react";
+import { type ReactNode } from "react";
 
 export default function Sidebar() {
   const pathname = usePathname();
 
-  const links = [
-    { href: "/dashboard", label: "Dashboard", icon: "📊" },
-    { href: "/catalog", label: "Catálogo de Seguros", icon: "🛡️" },
-    { href: "/clients", label: "Mis Clientes", icon: "👥" },
-    { href: "/clients/new", label: "Nuevo Cliente", icon: "➕" },
-    { href: "/recommendations", label: "Recomendaciones", icon: "🤖" },
+  const links: { href: string; label: string; icon: ReactNode }[] = [
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard size={20} />,
+    },
+    {
+      href: "/catalog",
+      label: "Catálogo de Seguros",
+      icon: <ShieldCheck size={20} />,
+    },
+    { href: "/clients", label: "Mis Clientes", icon: <Users size={20} /> },
+    {
+      href: "/clients/new",
+      label: "Nuevo Cliente",
+      icon: <UserPlus size={20} />,
+    },
+    {
+      href: "/recommendations",
+      label: "Recomendaciones",
+      icon: <BrainCircuit size={20} />,
+    },
   ];
 
   return (
@@ -35,7 +59,7 @@ export default function Sidebar() {
                   : "text-white/70 hover:bg-white/10 hover:text-white"
               }`}
             >
-              <span className="text-xl">{link.icon}</span>
+              {link.icon}
               {link.label}
             </Link>
           );
@@ -43,7 +67,7 @@ export default function Sidebar() {
       </nav>
       <div className="p-4 border-t border-white/10">
         <p className="text-xs text-white/50 text-center uppercase tracking-widest font-semibold">
-          Version 0.2.0 Beta
+          Version 0.3.0 Beta
         </p>
       </div>
     </aside>
