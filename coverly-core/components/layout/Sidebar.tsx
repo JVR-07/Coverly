@@ -11,6 +11,7 @@ export default function Sidebar() {
     { href: "/catalog", label: "Catálogo de Seguros", icon: "🛡️" },
     { href: "/clients", label: "Mis Clientes", icon: "👥" },
     { href: "/clients/new", label: "Nuevo Cliente", icon: "➕" },
+    { href: "/recommendations", label: "Recomendaciones", icon: "🤖" },
   ];
 
   return (
