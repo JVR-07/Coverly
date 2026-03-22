@@ -10,28 +10,31 @@ class MatchingService:
         requested_products: List[str],
         economic_profile: Dict = None,
         risk_level: str = None,
+        claims_history: int = None,
     ):
         """
-        Lógica de matching:
-        1. Obtiene productos activos.
-        2. Obtiene promociones activas.
-        3. Compara contra intereses del cliente, aplica filtro económico.
-        4. Calcula score + aplica reglas de upselling y cross-selling.
+        Motor de recomendación con scoring ponderado:
+        S = (P × 0.40) + (N × 0.30) + (H × 0.20) + (R × 0.10)
+
+        P = Perfil Económico (0-100)
+        N = Necesidades (0-100)
+        H = Historial (0-100)
+        R = Riesgo (0-100)
         """
-        
+
         products = db.query(Product).filter(Product.is_active == True).all()
-        
+
         now = datetime.utcnow()
         promotions = db.query(Promotion).filter(
             Promotion.is_active == True,
             (Promotion.expires_at == None) | (Promotion.expires_at >= now)
         ).all()
-        
+
         recommendations = []
         excluded = []
-        
-        monthly_income = None
+
         annual_income = None
+        monthly_income = None
         if economic_profile and "annualIncome" in economic_profile:
             annual_income = float(economic_profile["annualIncome"])
             monthly_income = annual_income / 12.0
@@ -39,38 +42,66 @@ class MatchingService:
         requested_lower = [p.lower() for p in requested_products]
 
         for product in products:
-            match_score = 0.0
+            price_base = float(product.price_base or 0)
             reasons = []
 
             if monthly_income is not None:
-                if float(product.price_base or 0) > monthly_income * 0.10:
+                if price_base > monthly_income * 0.10:
                     excluded.append({
                         "productId": product.id,
                         "name": product.name,
-                        "reason": f"El precio base ({float(product.price_base):.2f}) supera el 10% del ingreso mensual del cliente ({monthly_income * 0.10:.2f})."
+                        "reason": f"El precio base ({price_base:.2f}) supera el 10% del ingreso mensual del cliente ({monthly_income * 0.10:.2f})."
                     })
                     continue
-            
-            if product.type.lower() in requested_lower:
-                match_score += 70.0
-                reasons.append(f"El producto de tipo {product.type} coincide con tus intereses.")
+
+            if annual_income and annual_income > 0:
+                income_ratio = price_base / annual_income
+                P = max(0.0, min(100.0, 100 - (income_ratio * 500)))
             else:
-                match_score += 20.0
-                reasons.append(f"Consideramos este producto {product.type} como complemento a tu perfil.")
-            
-            match_score += 15.5
-            reasons.append("Alta compatibilidad detectada en perfil de riesgo estándar.")
+                P = 50.0
+
+            if P >= 80:
+                reasons.append("Este seguro representa un porcentaje mínimo de tus ingresos, garantizando estabilidad financiera.")
+            elif P >= 50:
+                reasons.append("El costo del seguro es accesible según tu perfil económico.")
+
+            if product.type.lower() in requested_lower:
+                N = 100.0
+                reasons.append(f"El producto de tipo {product.type} coincide directamente con tus necesidades declaradas.")
+            else:
+                N = 0.0
+                reasons.append(f"Producto {product.type} complementario a tu perfil.")
+
+            if claims_history is not None:
+                if claims_history == 0:
+                    H = 90.0
+                    reasons.append("Sin siniestros previos. Historial impecable.")
+                elif claims_history <= 2:
+                    H = 60.0
+                else:
+                    H = 30.0
+                    reasons.append("Tu historial de siniestros reduce la puntuación.")
+            else:
+                H = 50.0
+
+            risk_scores = {"LOW": 90.0, "MEDIUM": 60.0, "HIGH": 30.0}
+            R = risk_scores.get(risk_level, 50.0)
+
+            if risk_level == "LOW":
+                reasons.append("Tu perfil de bajo riesgo te da acceso a mejores condiciones.")
+
+            score = (P * 0.40) + (N * 0.30) + (H * 0.20) + (R * 0.10)
 
             is_premium = "premium" in product.name.lower()
             if risk_level == "LOW" and annual_income and annual_income > 500000:
                 if is_premium:
-                    match_score += 10.0
+                    score += 10.0
                     reasons.append("Producto Premium recomendado: tu perfil de bajo riesgo e ingresos altos lo hacen ideal.")
-            
-            if match_score >= 50:
+
+            if score >= 40:
                 applied_promotions = []
-                final_price = float(product.price_base or 0.0)
-                
+                final_price = price_base
+
                 for promo in promotions:
                     if promo.discount_percent:
                         applied_promotions.append({
@@ -79,13 +110,13 @@ class MatchingService:
                         })
                         discount = (final_price * float(promo.discount_percent)) / 100.0
                         final_price -= discount
-                        break 
-                
+                        break
+
                 recommendations.append({
                     "productId": product.id,
                     "name": product.name,
                     "type": product.type,
-                    "matchScore": round(match_score, 1),
+                    "matchScore": round(score, 1),
                     "reasons": reasons,
                     "appliedPromotions": applied_promotions,
                     "finalPrice": round(final_price, 2)
@@ -94,9 +125,9 @@ class MatchingService:
                 excluded.append({
                     "productId": product.id,
                     "name": product.name,
-                    "reason": "Match score inferior al umbral mínimo del 50%."
+                    "reason": f"Score de adecuación ({round(score, 1)}) inferior al umbral mínimo (40)."
                 })
-        
+
         recommendations.sort(key=lambda x: x["matchScore"], reverse=True)
 
         if "life" in requested_lower:
@@ -110,5 +141,5 @@ class MatchingService:
                     "Sugerencia cruzada: contratar Hogar junto con Vida ofrece mayor protección familiar integral."
                 )
                 recommendations.sort(key=lambda x: x["matchScore"], reverse=True)
-        
+
         return recommendations, excluded

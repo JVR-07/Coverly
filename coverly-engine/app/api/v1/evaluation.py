@@ -4,6 +4,9 @@ from app.schemas.evaluation import EvaluateRequest, EvaluateResponse
 from app.services.matching import MatchingService
 from app.core.db import get_db
 import uuid
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -19,7 +22,8 @@ def evaluate_client(request: EvaluateRequest, db: Session = Depends(get_db)):
             db=db, 
             requested_products=request.context.requestedProducts,
             economic_profile=request.economicProfile,
-            risk_level=request.riskLevel
+            risk_level=request.riskLevel,
+            claims_history=request.claimsHistory
         )
         
         avg_score = sum(r["matchScore"] for r in recommendations) / len(recommendations) if recommendations else 0.0
@@ -33,6 +37,6 @@ def evaluate_client(request: EvaluateRequest, db: Session = Depends(get_db)):
             excludedProducts=excluded
         )
     except Exception as e:
-        print(f"Error en motor: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Falla interna del motor: {str(e)}")
+        logger.error(f"Error en motor de evaluación: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error interno al procesar la evaluación.")
 

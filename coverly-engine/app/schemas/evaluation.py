@@ -9,6 +9,7 @@ class EvaluateRequest(BaseModel):
     context: ContextSchema
     economicProfile: Optional[dict] = None
     riskLevel: Optional[str] = None
+    claimsHistory: Optional[int] = None
 
 class PromotionSchema(BaseModel):
     promotionId: str
