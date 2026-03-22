@@ -49,6 +49,8 @@ model Client {
   createdAt       DateTime         @default(now()) @map("created_at")
   recommendations Recommendation[]
 
+  @@index([agentId])
+  @@index([createdAt])
   @@map("clients")
 }
 
@@ -63,6 +65,8 @@ model Product {
   coverages           Coverage[]
   recommendedProducts RecommendedProduct[]
 
+  @@index([type])
+  @@index([isActive])
   @@map("products")
 }
 
@@ -89,6 +93,11 @@ model Recommendation {
   createdAt       DateTime             @default(now()) @map("created_at")
   products        RecommendedProduct[]
 
+  @@index([clientId])
+  @@index([agentId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([status, createdAt])
   @@map("recommendations")
 }
 
