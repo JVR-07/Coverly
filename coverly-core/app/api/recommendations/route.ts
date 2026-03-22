@@ -2,58 +2,77 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { evaluateClient } from "@/lib/engine";
 import { prisma } from "@/lib/prisma";
+import { logger } from "@/lib/logger";
+import { apiHandler, apiError } from "@/lib/api-handler";
 
-export const POST = auth(async (req) => {
-  if (!req.auth) {
-    return NextResponse.json(
-      { success: false, error: { code: "ERR_401", message: "Unauthorized" } },
-      { status: 401 },
-    );
-  }
+export const POST = auth(
+  apiHandler(async (req: any) => {
+    if (!req.auth) {
+      return apiError({
+        message: "Unauthorized",
+        status: 401,
+        code: "ERR_401",
+      });
+    }
 
-  try {
     const body = await req.json();
     const { clientId } = body;
 
     if (!clientId) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: "ERR_400",
-            message: "El campo 'clientId' es requerido.",
-          },
-        },
-        { status: 400 },
-      );
+      return apiError({
+        message: "Falta el ID del cliente.",
+        status: 400,
+        code: "ERR_400",
+      });
     }
 
-    const engineResult = await evaluateClient(clientId);
+    const client = await prisma.client.findUnique({
+      where: { id: clientId },
+    });
 
-    const agentId = req.auth.user.id;
+    if (!client) {
+      return apiError({
+        message: "Cliente no encontrado.",
+        status: 404,
+        code: "ERR_404",
+      });
+    }
+
+    const evaluationResult = await evaluateClient(clientId);
+
+    if (!evaluationResult?.recommendationId) {
+      throw new Error("Respuesta inválida del motor de recomendación.");
+    }
 
     const recommendation = await prisma.recommendation.create({
       data: {
-        clientId,
-        agentId,
+        id: evaluationResult.recommendationId,
+        clientId: client.id,
+        agentId: req.auth.user.id,
         status: "GENERATED",
-        globalScore: engineResult.globalScore,
-        products: {
-          create: engineResult.recommendedProducts.map((rp) => ({
-            productId: rp.productId,
-            matchScore: rp.matchScore,
-            finalPrice: rp.finalPrice,
-            justifications: rp.reasons,
-          })),
-        },
+        globalScore: evaluationResult.globalScore,
       },
+    });
+
+    const productsData = evaluationResult.recommendedProducts.map((p) => ({
+      recommendationId: recommendation.id,
+      productId: p.productId,
+      matchScore: p.matchScore,
+      finalPrice: p.finalPrice,
+      justifications: p.reasons,
+    }));
+
+    if (productsData.length > 0) {
+      await prisma.recommendedProduct.createMany({
+        data: productsData,
+      });
+    }
+
+    const completeRecommendation = await prisma.recommendation.findUnique({
+      where: { id: recommendation.id },
       include: {
         products: {
-          include: {
-            product: {
-              select: { id: true, name: true, type: true, priceBase: true },
-            },
-          },
+          include: { product: true },
         },
       },
     });
@@ -62,26 +81,14 @@ export const POST = auth(async (req) => {
       {
         success: true,
         data: {
-          recommendation,
-          engineResult,
+          recommendation: completeRecommendation,
+          excluded: evaluationResult.excludedProducts,
         },
       },
       { status: 201 },
     );
-  } catch (error: any) {
-    console.error("API recommendations error:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: "ERR_500",
-          message: error.message || "Error al generar recomendación.",
-        },
-      },
-      { status: 500 },
-    );
-  }
-});
+  }),
+);
 
 export const GET = auth(async (req) => {
   if (!req.auth) {

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import Link from "next/link";
+import { Inbox } from "lucide-react";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -87,7 +88,7 @@ export default async function DashboardPage() {
 
         {latestClients.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-12 text-center text-slate">
-            <span className="text-4xl mb-4 opacity-50">📭</span>
+            <Inbox size={40} className="mb-4 opacity-50" />
             <p className="font-medium">Todavía no hay clientes creados.</p>
             <p className="text-sm mt-2">
               Visita &quot;Nuevo Cliente&quot; en el menú para crear el primero.
@@ -125,7 +126,7 @@ export default async function DashboardPage() {
                     })}
                   </span>
                   <Link
-                    href={`/clients`}
+                    href={`/clients/${client.id}`}
                     className="text-xs text-trust-blue hover:underline"
                   >
                     Ver →

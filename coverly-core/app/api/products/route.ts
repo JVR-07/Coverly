@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { apiHandler, apiError } from "@/lib/api-handler";
 
-export const GET = auth(async (req) => {
-  if (!req.auth) {
-    return NextResponse.json({ success: false, error: { message: "Unauthorized" } }, { status: 401 });
-  }
+export const GET = auth(
+  apiHandler(async (req: any) => {
+    if (!req.auth) {
+      return apiError({
+        message: "Unauthorized",
+        status: 401,
+        code: "ERR_401",
+      });
+    }
 
-  try {
     const searchParams = req.nextUrl.searchParams;
-    const type = searchParams.get('type');
-    const isActive = searchParams.get('isActive') === 'true' ? true : undefined;
+    const type = searchParams.get("type");
+    const isActive = searchParams.get("isActive") === "true" ? true : undefined;
 
     const products = await prisma.product.findMany({
       where: {
@@ -18,12 +23,10 @@ export const GET = auth(async (req) => {
         ...(isActive !== undefined && { isActive }),
       },
       include: {
-        coverages: true
-      }
+        coverages: true,
+      },
     });
 
     return NextResponse.json({ success: true, data: products });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: { message: "Server error fetching products", details: error.message } }, { status: 500 });
-  }
-});
+  }),
+);

@@ -7,6 +7,8 @@
   --color-soft-light: #f5f7fa;
   --color-graphite: #2e2e2e;
   --color-slate: #6b7280;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-heading: var(--font-outfit), "Outfit", system-ui, sans-serif;
 }
 
 :root {
@@ -17,4 +19,37 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+}
+
+@keyframes coverly-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coverly-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-coverly-spin {
+  animation: coverly-spin 1s linear infinite;
+}
+
+.animate-coverly-pulse {
+  animation: coverly-pulse 2s ease-in-out infinite;
 }

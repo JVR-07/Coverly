@@ -13,6 +13,7 @@ import {
   Skeleton,
 } from "@nextui-org/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -27,6 +28,7 @@ interface Client {
 }
 
 export default function MisClientesPage() {
+  const router = useRouter();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -98,7 +100,10 @@ export default function MisClientesPage() {
               wrapper: "bg-transparent p-0",
               th: "bg-gray-50 text-slate font-semibold text-sm py-4 border-b border-gray-100 uppercase tracking-wider",
               td: "py-4 border-b border-gray-50",
+              tr: "cursor-pointer",
             }}
+            selectionMode="single"
+            onRowAction={(key) => router.push(`/clients/${String(key)}`)}
           >
             <TableHeader>
               <TableColumn>NOMBRE COMPLETO</TableColumn>
