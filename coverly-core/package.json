@@ -10,21 +10,23 @@
     "test": "jest"
   },
   "dependencies": {
+    "@heroui/react": "^3.0.1",
     "@hookform/resolvers": "^5.2.2",
-    "@nextui-org/react": "^2.6.11",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "bcryptjs": "^3.0.3",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
-    "framer-motion": "^12.37.0",
+    "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "next-auth": "^5.0.0-beta.30",
+    "npm": "^11.12.0",
     "pg": "^8.20.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.2",
+    "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
