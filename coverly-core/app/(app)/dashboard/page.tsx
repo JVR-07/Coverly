@@ -10,28 +10,29 @@ export default async function DashboardPage() {
   const userId = session?.user?.id;
   const isAdmin = session?.user?.role === "ADMIN";
 
-  const [clientCount, recommendationCount, productCount, latestClients] = await Promise.all([
-    prisma.client.count({
-      where: isAdmin ? {} : { agentId: userId },
-    }),
-    prisma.recommendation.count({
-      where: isAdmin ? {} : { agentId: userId },
-    }),
-    prisma.product.count(),
-    prisma.client.findMany({
-      where: isAdmin ? {} : { agentId: userId },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        createdAt: true,
-        riskLevel: true,
-      },
-    }),
-  ]);
+  const [clientCount, recommendationCount, productCount, latestClients] =
+    await Promise.all([
+      prisma.client.count({
+        where: isAdmin ? {} : { agentId: userId },
+      }),
+      prisma.recommendation.count({
+        where: isAdmin ? {} : { agentId: userId },
+      }),
+      prisma.product.count(),
+      prisma.client.findMany({
+        where: isAdmin ? {} : { agentId: userId },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          createdAt: true,
+          riskLevel: true,
+        },
+      }),
+    ]);
 
   const riskColorMap: Record<string, string> = {
     LOW: "bg-emerald-100 text-emerald-700",
@@ -74,7 +75,7 @@ export default async function DashboardPage() {
         <div className="p-6 bg-white rounded-xl border border-gray-100 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-2 h-full bg-green-500"></div>
           <h3 className="text-sm font-semibold text-slate mb-1">
-            Descubrimientos AI
+            Recomendaciones Generadas
           </h3>
           <p className="text-2xl font-bold text-green-600">
             {recommendationCount}
@@ -86,9 +87,7 @@ export default async function DashboardPage() {
           <h3 className="text-sm font-semibold text-slate mb-1">
             Catálogo Total
           </h3>
-          <p className="text-2xl font-bold text-purple-600">
-            {productCount}
-          </p>
+          <p className="text-2xl font-bold text-purple-600">{productCount}</p>
         </div>
       </div>
 

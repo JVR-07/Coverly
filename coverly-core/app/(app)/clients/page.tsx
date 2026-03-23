@@ -1,21 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Chip,
-  Button,
-  Skeleton,
-} from "@nextui-org/react";
+import { Table, Button, Skeleton } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { UserPlus } from "lucide-react";
 
 interface Client {
   id: string;
@@ -66,15 +57,15 @@ export default function MisClientesPage() {
             Consulta y gestiona el perfilamiento de tu cartera de clientes.
           </p>
         </div>
-        <Button
-          as={Link}
-          href="/clients/new"
-          color="primary"
-          radius="full"
-          className="bg-insight-teal text-white font-semibold"
-        >
-          ＋ Nuevo Cliente
-        </Button>
+        <Link href="/clients/new">
+          <Button
+            variant="primary"
+            className="bg-trust-blue text-white font-bold rounded-full px-6 h-11 shadow-md hover:shadow-trust-blue/20 hover:scale-[1.02] transition-all flex items-center gap-2"
+          >
+            <UserPlus size={18} />
+            <span>Nuevo Cliente</span>
+          </Button>
+        </Link>
       </header>
 
       {loading ? (
@@ -91,69 +82,81 @@ export default function MisClientesPage() {
         </div>
       ) : (
         <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-          <Table
-            aria-label="Tabla de clientes"
-            classNames={{
-              wrapper: "bg-transparent p-0 overflow-x-auto w-full block",
-              th: "bg-gray-50 text-slate font-semibold text-sm py-4 border-b border-gray-100 uppercase tracking-wider whitespace-nowrap",
-              td: "py-4 border-b border-gray-50 whitespace-nowrap",
-              tr: "cursor-pointer",
-            }}
-            selectionMode="single"
-            onRowAction={(key) => router.push(`/clients/${String(key)}`)}
-          >
-            <TableHeader>
-              <TableColumn>NOMBRE COMPLETO</TableColumn>
-              <TableColumn>CORREO</TableColumn>
-              <TableColumn>FECHA DE REGISTRO</TableColumn>
-              <TableColumn>NIVEL DE RIESGO</TableColumn>
-              <TableColumn>INTERESES</TableColumn>
-            </TableHeader>
-            <TableBody emptyContent="No hay clientes registrados aún. ¡Añade el primero!">
-              {clients.map((client) => (
-                <TableRow
-                  key={client.id}
-                  className="hover:bg-soft-light transition-colors"
-                >
-                  <TableCell className="font-semibold text-trust-blue">
-                    {client.firstName} {client.lastName}
-                  </TableCell>
-                  <TableCell className="text-slate">
-                    {client.email || "No especificado"}
-                  </TableCell>
-                  <TableCell className="text-slate">
-                    {format(new Date(client.createdAt), "dd MMM yyyy", {
-                      locale: es,
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                        riskColorMap[client.riskLevel] ||
-                        "bg-gray-100 text-gray-600"
-                      }`}
-                    >
-                      {riskLabelMap[client.riskLevel] ||
-                        client.riskLevel ||
-                        "N/A"}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1.5 flex-wrap">
-                      {client.needs.map((need) => (
-                        <div
-                          key={need}
-                          className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-trust-blue text-white"
-                        >
-                          {need}
-                        </div>
-                      ))}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {clients.length === 0 ? (
+            <div className="p-12 text-center text-slate">
+              No hay clientes registrados aún. ¡Añade el primero!
+            </div>
+          ) : (
+            <Table aria-label="Tabla de clientes">
+              <Table.ScrollContainer>
+                <Table.Content className="w-full">
+                  <Table.Header className="bg-gray-50 text-slate font-semibold text-sm border-b border-gray-100 uppercase tracking-wider">
+                    <Table.Column isRowHeader className="p-4 text-left">
+                      NOMBRE COMPLETO
+                    </Table.Column>
+                    <Table.Column className="p-4 text-left">
+                      CORREO
+                    </Table.Column>
+                    <Table.Column className="p-4 text-left">
+                      FECHA DE REGISTRO
+                    </Table.Column>
+                    <Table.Column className="p-4 text-left">
+                      NIVEL DE RIESGO
+                    </Table.Column>
+                    <Table.Column className="p-4 text-left">
+                      INTERESES
+                    </Table.Column>
+                  </Table.Header>
+                  <Table.Body items={clients}>
+                    {(client) => (
+                      <Table.Row
+                        key={client.id}
+                        id={client.id}
+                        className="hover:bg-soft-light transition-colors border-b border-gray-50 cursor-pointer"
+                        onAction={() => router.push(`/clients/${client.id}`)}
+                      >
+                        <Table.Cell className="font-semibold text-trust-blue p-4">
+                          {client.firstName} {client.lastName}
+                        </Table.Cell>
+                        <Table.Cell className="text-slate p-4">
+                          {client.email || "No especificado"}
+                        </Table.Cell>
+                        <Table.Cell className="text-slate p-4">
+                          {format(new Date(client.createdAt), "dd MMM yyyy", {
+                            locale: es,
+                          })}
+                        </Table.Cell>
+                        <Table.Cell className="p-4">
+                          <span
+                            className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                              riskColorMap[client.riskLevel] ||
+                              "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {riskLabelMap[client.riskLevel] ||
+                              client.riskLevel ||
+                              "N/A"}
+                          </span>
+                        </Table.Cell>
+                        <Table.Cell className="p-4">
+                          <div className="flex gap-1.5 flex-wrap">
+                            {client.needs.map((need) => (
+                              <div
+                                key={need}
+                                className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-trust-blue text-white"
+                              >
+                                {need}
+                              </div>
+                            ))}
+                          </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    )}
+                  </Table.Body>
+                </Table.Content>
+              </Table.ScrollContainer>
+            </Table>
+          )}
         </div>
       )}
     </div>

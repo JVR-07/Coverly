@@ -1,16 +1,16 @@
 "use client";
 
-import { Input, Button } from "@nextui-org/react";
+import { Input, Button } from "@heroui/react";
 import { useActionState, useState } from "react";
 import { authenticate } from "./actions";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
   );
-  
+
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -23,29 +23,21 @@ export default function LoginForm() {
         >
           Correo Electrónico
         </label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="ejemplo@correo.com"
-          variant="bordered"
-          isRequired
-          classNames={{
-            input:
-              "text-graphite placeholder:text-slate/40 text-base py-0 h-full",
-            inputWrapper: [
-              "border-gray-200",
-              "hover:border-trust-blue/30",
-              "focus-within:!border-trust-blue",
-              "bg-white",
-              "shadow-sm",
-              "h-14",
-              "px-5",
-              "flex items-center",
-              "rounded-3xl",
-            ],
-          }}
-        />
+        <div className="relative flex items-center h-14 w-full border-1.5 border-gray-200 hover:border-trust-blue/30 focus-within:border-trust-blue! bg-white shadow-sm rounded-3xl px-5 transition-colors">
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="ejemplo@correo.com"
+            variant="flat"
+            required
+            className="w-full h-full bg-transparent border-none focus:ring-0 outline-none p-0"
+            style={{
+              boxShadow: "none",
+              background: "transparent",
+            }}
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -55,47 +47,42 @@ export default function LoginForm() {
         >
           Contraseña
         </label>
-        <Input
-          id="password"
-          name="password"
-          type={isVisible ? "text" : "password"}
-          placeholder="••••••••"
-          variant="bordered"
-          isRequired
-          endContent={
-            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-              {isVisible ? (
-                <EyeOff className="text-xl text-slate pointer-events-none" />
-              ) : (
-                <Eye className="text-xl text-slate pointer-events-none" />
-              )}
-            </button>
-          }
-          classNames={{
-            input:
-              "text-graphite placeholder:text-slate/40 text-base py-0 h-full",
-            inputWrapper: [
-              "border-gray-200",
-              "hover:border-trust-blue/30",
-              "focus-within:!border-trust-blue",
-              "bg-white",
-              "shadow-sm",
-              "h-14",
-              "px-5",
-              "flex items-center",
-              "rounded-3xl",
-            ],
-          }}
-        />
+        <div className="relative flex items-center h-14 w-full border-1.5 border-gray-200 hover:border-trust-blue/30 focus-within:border-trust-blue! bg-white shadow-sm rounded-3xl px-5 transition-colors">
+          <Input
+            id="password"
+            name="password"
+            type={isVisible ? "text" : "password"}
+            placeholder="••••••••"
+            variant="flat"
+            required
+            className="w-full h-full bg-transparent border-none focus:ring-0 outline-none p-0"
+            style={{
+              boxShadow: "none",
+              background: "transparent",
+            }}
+          />
+          <button
+            className="focus:outline-none p-2 -mr-1"
+            type="button"
+            onClick={toggleVisibility}
+            aria-label="toggle password visibility"
+          >
+            {isVisible ? (
+              <EyeOff className="size-5 text-slate hover:text-trust-blue transition-colors" />
+            ) : (
+              <Eye className="size-5 text-slate hover:text-trust-blue transition-colors" />
+            )}
+          </button>
+        </div>
       </div>
 
       <Button
         type="submit"
-        color="primary"
-        isLoading={isPending}
+        isDisabled={isPending}
         className="mt-4 bg-trust-blue text-white font-bold h-14 shadow-lg hover:shadow-trust-blue/20 hover:scale-[1.01] transition-all active:scale-[0.98] rounded-3xl"
       >
-        Iniciar Sesión
+        {isPending ? <Loader2 size={18} className="animate-spin" /> : null}
+        {isPending ? "Iniciando..." : "Iniciar Sesión"}
       </Button>
 
       {errorMessage && (

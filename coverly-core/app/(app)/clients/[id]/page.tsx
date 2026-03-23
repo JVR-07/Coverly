@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Chip, Button, Divider } from "@nextui-org/react";
+import { Chip, Button, Separator } from "@heroui/react";
 import {
   User,
   Mail,
@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   BrainCircuit,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 
@@ -57,14 +58,17 @@ const riskLabelMap: Record<string, string> = {
   HIGH: "Riesgo Alto",
 };
 
-const statusMap: Record<
-  string,
-  { label: string; color: "success" | "warning" | "danger" | "default" }
-> = {
-  GENERATED: { label: "Generada", color: "default" },
-  PRESENTED: { label: "Presentada", color: "warning" },
-  ACCEPTED: { label: "Aceptada", color: "success" },
-  REJECTED: { label: "Rechazada", color: "danger" },
+const statusStyleMap: Record<string, string> = {
+  GENERATED: "bg-gray-100 text-gray-700",
+  PRESENTED: "bg-yellow-100 text-yellow-700",
+  ACCEPTED: "bg-emerald-100 text-emerald-700",
+  REJECTED: "bg-red-100 text-red-700",
+};
+
+const clientTypeLabelMap: Record<string, string> = {
+  NEW: "Nuevo Cliente",
+  LOYAL: "Cliente Fiel",
+  PROSPECT: "Prospecto",
 };
 
 export default function ClientDetailPage() {
@@ -117,8 +121,7 @@ export default function ClientDetailPage() {
         <p className="font-medium text-lg">Cliente no encontrado.</p>
         <Button
           className="mt-4"
-          color="primary"
-          variant="flat"
+          variant="ghost"
           onPress={() => router.push("/clients")}
         >
           <ArrowLeft size={16} /> Volver a clientes
@@ -138,12 +141,12 @@ export default function ClientDetailPage() {
         <ArrowLeft size={14} /> Todos los clientes
       </button>
 
-      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-trust-blue">
+      <header className="flex items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-4xl font-extrabold text-trust-blue tracking-tight">
             {client.firstName} {client.lastName}
           </h1>
-          <div className="flex items-center gap-3 mt-2">
+          <div className="flex items-center gap-2">
             {client.riskLevel && (
               <span
                 className={`text-xs font-medium px-2.5 py-1 rounded-full ${
@@ -153,34 +156,26 @@ export default function ClientDetailPage() {
                 {riskLabelMap[client.riskLevel] || client.riskLevel}
               </span>
             )}
-            <Chip
-              size="sm"
-              variant="flat"
-              className="capitalize bg-trust-blue/10 text-trust-blue"
-            >
-              {client.clientType}
-            </Chip>
+            <span className="text-xs font-bold uppercase tracking-wider bg-trust-blue/10 text-trust-blue px-2.5 py-1 rounded-full">
+              {clientTypeLabelMap[client.clientType] || client.clientType}
+            </span>
           </div>
         </div>
         <Button
-          color="primary"
-          radius="full"
-          className="bg-insight-teal text-white font-semibold flex items-center justify-center text-center h-auto min-h-10 py-2.5 leading-tight shadow-md hover:shadow-lg transition-all"
-          isLoading={generating}
-          startContent={
-            generating ? (
-              <Loader2 size={16} className="animate-coverly-spin shrink-0" />
-            ) : (
-              <BrainCircuit size={16} className="shrink-0" />
-            )
-          }
+          variant="primary"
+          className="bg-insight-teal text-white font-bold rounded-full h-11 px-6 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
           onPress={handleGenerateRecommendation}
         >
+          {generating ? (
+            <Loader2 size={18} className="animate-spin" />
+          ) : (
+            <Sparkles size={18} />
+          )}
           <span>Generar Recomendación</span>
         </Button>
       </header>
 
-      <Divider className="bg-gray-100" />
+      <Separator className="bg-gray-100" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Personal Data */}
@@ -261,12 +256,12 @@ export default function ClientDetailPage() {
           </h2>
           <div className="flex flex-wrap gap-2">
             {client.needs.map((need) => (
-              <div
+              <span
                 key={need}
-                className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-trust-blue text-white shadow-sm"
+                className="px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-trust-blue text-white shadow-sm"
               >
                 {need}
-              </div>
+              </span>
             ))}
           </div>
         </section>
@@ -285,7 +280,6 @@ export default function ClientDetailPage() {
         ) : (
           <div className="space-y-3">
             {recommendations.map((rec) => {
-              const st = statusMap[rec.status] || statusMap.GENERATED;
               return (
                 <button
                   key={rec.id}
@@ -295,8 +289,8 @@ export default function ClientDetailPage() {
                   <div>
                     <p className="text-sm font-medium text-graphite">
                       Score: {Number(rec.globalScore).toFixed(1)} —{" "}
-                      {rec.products.length} producto
-                      {rec.products.length !== 1 ? "s" : ""}
+                      {rec.products.length}{" "}
+                      {rec.products.length === 1 ? "producto" : "productos"}
                     </p>
                     <p className="text-xs text-slate mt-1">
                       {new Date(rec.createdAt).toLocaleDateString("es-MX", {
@@ -306,9 +300,21 @@ export default function ClientDetailPage() {
                       })}
                     </p>
                   </div>
-                  <Chip size="sm" color={st.color} variant="flat">
-                    {st.label}
-                  </Chip>
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                      statusStyleMap[rec.status] || "bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {rec.status === "GENERATED"
+                      ? "Generada"
+                      : rec.status === "PRESENTED"
+                        ? "Presentada"
+                        : rec.status === "ACCEPTED"
+                          ? "Aceptada"
+                          : rec.status === "REJECTED"
+                            ? "Rechazada"
+                            : rec.status}
+                  </span>
                 </button>
               );
             })}

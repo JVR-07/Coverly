@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardBody, Chip, Skeleton } from "@nextui-org/react";
+import { Card, Chip, Skeleton } from "@heroui/react";
 import Link from "next/link";
 
 interface RecommendedProduct {
@@ -28,13 +28,18 @@ interface Recommendation {
   products: RecommendedProduct[];
 }
 
-const statusMap: Record<
-  string,
-  { label: string; bg: string; text: string }
-> = {
+const statusMap: Record<string, { label: string; bg: string; text: string }> = {
   GENERATED: { label: "Generada", bg: "bg-gray-100", text: "text-gray-700" },
-  PRESENTED: { label: "Presentada", bg: "bg-yellow-100", text: "text-yellow-700" },
-  ACCEPTED: { label: "Aceptada", bg: "bg-emerald-100", text: "text-emerald-700" },
+  PRESENTED: {
+    label: "Presentada",
+    bg: "bg-yellow-100",
+    text: "text-yellow-700",
+  },
+  ACCEPTED: {
+    label: "Aceptada",
+    bg: "bg-emerald-100",
+    text: "text-emerald-700",
+  },
   REJECTED: { label: "Rechazada", bg: "bg-red-100", text: "text-red-700" },
 };
 
@@ -68,12 +73,12 @@ export default function RecommendationsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="bg-white border border-gray-100 shadow-sm">
-              <CardBody className="p-6 space-y-3">
+              <Card.Content className="p-6 space-y-3">
                 <Skeleton className="w-3/5 h-5 rounded-lg" />
                 <Skeleton className="w-2/5 h-4 rounded-lg" />
                 <Skeleton className="w-full h-4 rounded-lg" />
                 <Skeleton className="w-4/5 h-4 rounded-lg" />
-              </CardBody>
+              </Card.Content>
             </Card>
           ))}
         </div>
@@ -97,7 +102,7 @@ export default function RecommendationsPage() {
                 className="group"
               >
                 <Card className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all overflow-hidden duration-200 group-hover:border-insight-teal">
-                  <CardBody className="p-6">
+                  <Card.Content className="p-6">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <p className="font-bold text-graphite text-lg">
@@ -114,7 +119,9 @@ export default function RecommendationsPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${st.bg} ${st.text}`}>
+                        <span
+                          className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${st.bg} ${st.text}`}
+                        >
                           {st.label}
                         </span>
                       </div>
@@ -145,9 +152,7 @@ export default function RecommendationsPage() {
                             </div>
                           ))}
                           {rec.products.length > 3 && (
-                            <div
-                              className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-slate shadow-sm shrink-0"
-                            >
+                            <div className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-slate shadow-sm shrink-0">
                               +{rec.products.length - 3}
                             </div>
                           )}
@@ -158,7 +163,7 @@ export default function RecommendationsPage() {
                     <p className="text-xs text-insight-teal font-medium group-hover:underline mt-2">
                       Ver detalle →
                     </p>
-                  </CardBody>
+                  </Card.Content>
                 </Card>
               </Link>
             );
