@@ -8,7 +8,7 @@ Este documento define las tecnologías elegidas para el desarrollo de Coverly, a
 
 - **Framework:** **Next.js**. Al elegir Next.js, cubres el Front (React) y tu Backend Core (Node.js) bajo el mismo proyecto y despliegue. Las _API Routes_ o _Server Actions_ de Next.js actúan como Backend.
 - **Lenguaje:** TypeScript (Para un tipado estricto, logrando mayor escalabilidad y menos bugs).
-- **UI / Estética:** Tailwind CSS + **NextUI**.
+- **UI / Estética:** Tailwind CSS + **HeroUI v3** (anteriormente NextUI) y **Lucide React** para iconografía vectorial.
 - **Gestión de Estado (Frontend):** Zustand o React Context (según la complejidad que adquiera el Dashboard).
 
 ### 1.2. Motor de Recomendación (Microservicio)

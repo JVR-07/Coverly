@@ -51,7 +51,7 @@ El sistema sigue un estilo arquitectónico de Monolito Modular Cloud-Native, dis
 
 ### Stack Tecnológico
 
-**Core (Frontend/Backend):** Aplicación unificada construida con Next.js 16+ (App Router), React 19, y Tailwind CSS complementados con `@nextui-org/react`. Cuenta con **Prisma** como ORM para la persistencia, y usa `react-hook-form`, `zod`, y `bcryptjs` para la validación de formularios y seguridad de credenciales.
+**Core (Frontend/Backend):** Aplicación unificada construida con Next.js 16+ (App Router), React 19, y Tailwind CSS complementados con **HeroUI v3** y **Lucide React**. Cuenta con **Prisma** como ORM para la persistencia, y usa `react-hook-form`, `zod`, y `bcryptjs` para la validación de formularios y seguridad de credenciales.
 
 **Motor Inteligente:** Servicio aislado desarrollado en Python con **FastAPI** para la evaluación de reglas y scoring, listo para entornos contenerizados.
 
@@ -181,15 +181,15 @@ Para entender a profundidad el sistema, consulta los siguientes documentos ofici
 
 El desarrollo se rige por la metodología Agile Modular Iterativo (AMI):
 
-- **Fase 0:** Diseño y Setup (Arquitectura, CI/CD).
+- **Fase 0:** Diseño y Setup (Arquitectura, CI/CD). [Completada]
 
-- **Iteración 1:** Núcleo del sistema (Auth, CRUD Clientes/Productos).
+- **Iteración 1:** Núcleo del sistema (Auth, CRUD Clientes/Productos). [Completada]
 
-- **Iteración 2:** Inteligencia Comercial (Motor de recomendaciones, Promociones).
+- **Iteración 2:** Inteligencia Comercial (Motor de recomendaciones, Promociones). [Completada]
 
-- **Iteración 3:** Integración Completa (Reportes, Seguridad avanzada).
+- **Iteración 3:** Integración Completa (Estética UI/UX premium, Componentes unificados, Análisis AI integral). [Completada]
 
-- **Iteración 4:** Sistema End-to-End y estabilización.
+- **Iteración 4:** Sistema End-to-End y estabilización. [En Progreso]
 
 ---
 

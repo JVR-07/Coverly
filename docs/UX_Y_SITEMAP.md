@@ -37,10 +37,10 @@ La navegación se estructura mediante un menú lateral persistente que adapta su
 ### Registro de Cliente (Flujo Guiado)
 
 - **Propósito:** Capturar datos de forma eficiente.
-- **Estructura (Wizard de 3 pasos):**
+- **Estructura (Formulario en panel continuo):**
   1. **Datos Básicos:** Nombre, contacto, fecha de nacimiento.
   2. **Perfil Económico:** Ingresos, ocupación, dependientes.
-  3. **Necesidades:** ¿Qué busca proteger? (Auto, Salud, Vida, etc.).
+  3. **Necesidades e Intereses:** Sistema interactivo de chips por afinidad (Auto, Vida, etc.) y valoración de riesgo inicial.
 
 ### Detalle de Cliente y Recomendador
 
@@ -81,7 +81,8 @@ La navegación se estructura mediante un menú lateral persistente que adapta su
 
 Para mantener la **identidad de producto** (Confianza y Modernidad), se utilizarán los siguientes estándares:
 
-- **Framework de UI:** [Tailwind CSS](https://tailwindcss.com/) + [NextUI](https://nextui.org/).
+- **Framework de UI:** [Tailwind CSS](https://tailwindcss.com/) + [HeroUI v3](https://www.heroui.com/).
+- **Iconografía:** [Lucide React](https://lucide.dev/) para iconos consistentes y vectoriales en toda la dApp.
 - **Principios Visuales:**
   - **Glassmorphism sutil:** Para tarjetas y paneles laterales.
   - **Micro-interacciones:** Hovers en tarjetas de seguros y transiciones suaves entre pasos del registro.
